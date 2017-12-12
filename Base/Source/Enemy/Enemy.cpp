@@ -28,7 +28,7 @@ void CEnemy::Init(void)
 	defaultUp.Set(0, 1, 0);
 
 	// Set the current values
-	position.Set(10.0f, 0.0f, 0.0f);
+	//position.Set(10.0f, 0.0f, 0.0f);
 	target.Set(10.0f, 0.0f, 450.0f);
 	up.Set(0.0f, 1.0f, 0.0f);
 
@@ -43,7 +43,7 @@ void CEnemy::Init(void)
 	InitLOD("cube", "sphere", "cubeSG");
 
 	// Initialise the collider
-	this->SetCollider(true);
+	this->SetCollider(false);
 	this->SetAABB(Vector3(1, 1, 1), Vector3(-1, -1, -1));
 
 	// Add to the EntityManager

@@ -259,6 +259,9 @@ void SceneText::Init()
 	// =======================================================
 
 	// Create a CEnemy instance
+	CEnemy* theEnemyList = new CEnemy();
+	theEnemy.push_back(theEnemyList);
+
 	theEnemy[0] = new CEnemy();
 	theEnemy[0]->Init();
 	theEnemy[0]->SetScale(Vector3(5.f, 5.f, 5.f));
@@ -272,18 +275,27 @@ void SceneText::Init()
 	{
 		cout << "EntityManager::AddEntity: Unable to add to scene graph!" << endl;
 	}
-	
+	theEnemy.push_back(theEnemyList);
 	theEnemy[1] = new CEnemy();
 	theEnemy[1]->Init();
 	theEnemy[1]->InitLOD("cubeSG", "sphere", "cube");
 	theEnemy[1]->SetScale(Vector3(2.5f, 2.5f, 5.f));
-	theEnemy[1]->SetPosition(Vector3(theEnemy[0]->GetPos().x - 10, theEnemy[0]->GetPos().y - 10, theEnemy[0]->GetPos().z));
-	
+	theEnemy[1]->SetPosition(Vector3(theEnemy[0]->GetPos().x - 5, theEnemy[0]->GetPos().y, theEnemy[0]->GetPos().z));
+	//theEnemy[1]->SetCollider(true);
 	CSceneNode* theEnemyChildNode = theEnemyNode->AddChild(theEnemy[1]);
-	CUpdateTransformation *enemyChildMtx = new CUpdateTransformation();
-	enemyChildMtx->ApplyUpdate(0, 0, theEnemy[0]->GetPos().z);
-	theEnemyChildNode->SetUpdateTransformation(enemyChildMtx);
 	if (theEnemyChildNode == NULL)
+	{
+		cout << "EntityManager::AddEntity: Unable to add to scene graph!" << endl;
+	}
+	theEnemy.push_back(theEnemyList);
+	theEnemy[2] = new CEnemy();
+	theEnemy[2]->Init();
+	theEnemy[2]->InitLOD("cubeSG", "sphere", "cube");
+	theEnemy[2]->SetScale(Vector3(2.5f, 2.5f, 5.f));
+	theEnemy[2]->SetPosition(Vector3(theEnemy[0]->GetPos().x + 5, theEnemy[0]->GetPos().y, theEnemy[0]->GetPos().z));
+	//theEnemy[2]->SetCollider(true);
+	CSceneNode* theEnemyChildNode2 = theEnemyNode->AddChild(theEnemy[2]);
+	if (theEnemyChildNode2 == NULL)
 	{
 		cout << "EntityManager::AddEntity: Unable to add to scene graph!" << endl;
 	}
@@ -379,6 +391,9 @@ void SceneText::Update(double dt)
 		cout << "Mouse Wheel has offset in Y-axis of " << MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_YOFFSET) << endl;
 	}
 	// <THERE>
+
+	theEnemy[1]->SetPosition(Vector3(theEnemy[0]->GetPos().x - 5, theEnemy[0]->GetPos().y - 2, theEnemy[0]->GetPos().z));
+	theEnemy[2]->SetPosition(Vector3(theEnemy[0]->GetPos().x + 5, theEnemy[0]->GetPos().y - 2, theEnemy[0]->GetPos().z));
 
 	// Update the player position and other details based on keyboard and mouse inputs
 	playerInfo->Update(dt);

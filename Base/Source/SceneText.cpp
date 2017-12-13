@@ -43,44 +43,60 @@ SceneText::~SceneText()
 
 void SceneText::Init()
 {
-	currProg = GraphicsManager::GetInstance()->LoadShader("default", "Shader//Texture.vertexshader", "Shader//Texture.fragmentshader");
+	currProg = GraphicsManager::GetInstance()->LoadShader("default", "Shader//Texture.vertexshader", "Shader//MultiTexture.fragmentshader");
 
 	// Tell the shader program to store these uniform locations
-	currProg->AddUniform("MVP");
-	currProg->AddUniform("MV");
-	currProg->AddUniform("MV_inverse_transpose");
-	currProg->AddUniform("material.kAmbient");
-	currProg->AddUniform("material.kDiffuse");
-	currProg->AddUniform("material.kSpecular");
-	currProg->AddUniform("material.kShininess");
-	currProg->AddUniform("lightEnabled");
-	currProg->AddUniform("numLights");
-	currProg->AddUniform("lights[0].type");
-	currProg->AddUniform("lights[0].position_cameraspace");
-	currProg->AddUniform("lights[0].color");
-	currProg->AddUniform("lights[0].power");
-	currProg->AddUniform("lights[0].kC");
-	currProg->AddUniform("lights[0].kL");
-	currProg->AddUniform("lights[0].kQ");
-	currProg->AddUniform("lights[0].spotDirection");
-	currProg->AddUniform("lights[0].cosCutoff");
-	currProg->AddUniform("lights[0].cosInner");
-	currProg->AddUniform("lights[0].exponent");
-	currProg->AddUniform("lights[1].type");
-	currProg->AddUniform("lights[1].position_cameraspace");
-	currProg->AddUniform("lights[1].color");
-	currProg->AddUniform("lights[1].power");
-	currProg->AddUniform("lights[1].kC");
-	currProg->AddUniform("lights[1].kL");
-	currProg->AddUniform("lights[1].kQ");
-	currProg->AddUniform("lights[1].spotDirection");
-	currProg->AddUniform("lights[1].cosCutoff");
-	currProg->AddUniform("lights[1].cosInner");
-	currProg->AddUniform("lights[1].exponent");
-	currProg->AddUniform("colorTextureEnabled");
-	currProg->AddUniform("colorTexture");
-	currProg->AddUniform("textEnabled");
-	currProg->AddUniform("textColor");
+	{
+		currProg->AddUniform("MVP");
+		currProg->AddUniform("MV");
+		currProg->AddUniform("MV_inverse_transpose");
+		currProg->AddUniform("material.kAmbient");
+		currProg->AddUniform("material.kDiffuse");
+		currProg->AddUniform("material.kSpecular");
+		currProg->AddUniform("material.kShininess");
+		currProg->AddUniform("lightEnabled");
+		currProg->AddUniform("numLights");
+		currProg->AddUniform("lights[0].type");
+		currProg->AddUniform("lights[0].position_cameraspace");
+		currProg->AddUniform("lights[0].color");
+		currProg->AddUniform("lights[0].power");
+		currProg->AddUniform("lights[0].kC");
+		currProg->AddUniform("lights[0].kL");
+		currProg->AddUniform("lights[0].kQ");
+		currProg->AddUniform("lights[0].spotDirection");
+		currProg->AddUniform("lights[0].cosCutoff");
+		currProg->AddUniform("lights[0].cosInner");
+		currProg->AddUniform("lights[0].exponent");
+		currProg->AddUniform("lights[1].type");
+		currProg->AddUniform("lights[1].position_cameraspace");
+		currProg->AddUniform("lights[1].color");
+		currProg->AddUniform("lights[1].power");
+		currProg->AddUniform("lights[1].kC");
+		currProg->AddUniform("lights[1].kL");
+		currProg->AddUniform("lights[1].kQ");
+		currProg->AddUniform("lights[1].spotDirection");
+		currProg->AddUniform("lights[1].cosCutoff");
+		currProg->AddUniform("lights[1].cosInner");
+		currProg->AddUniform("lights[1].exponent");
+		currProg->AddUniform("colorTextureEnabled[0]");
+		currProg->AddUniform("colorTextureEnabled[1]");
+		currProg->AddUniform("colorTextureEnabled[2]");
+		currProg->AddUniform("colorTextureEnabled[3]");
+		currProg->AddUniform("colorTextureEnabled[4]");
+		currProg->AddUniform("colorTextureEnabled[5]");
+		currProg->AddUniform("colorTextureEnabled[6]");
+		currProg->AddUniform("colorTextureEnabled[7]");
+		currProg->AddUniform("colorTexture[0]");
+		currProg->AddUniform("colorTexture[1]");
+		currProg->AddUniform("colorTexture[2]");
+		currProg->AddUniform("colorTexture[3]");
+		currProg->AddUniform("colorTexture[4]");
+		currProg->AddUniform("colorTexture[5]");
+		currProg->AddUniform("colorTexture[6]");
+		currProg->AddUniform("colorTexture[7]");
+		currProg->AddUniform("textEnabled");
+		currProg->AddUniform("textColor");
+	}
 
 	// Tell the graphics manager to use the shader we just loaded
 	GraphicsManager::GetInstance()->SetActiveShader("default");
@@ -122,43 +138,51 @@ void SceneText::Init()
 	GraphicsManager::GetInstance()->AttachCamera(&camera);
 
 	// Load all the meshes
-	MeshBuilder::GetInstance()->GenerateAxes("reference");
-	MeshBuilder::GetInstance()->GenerateCrossHair("crosshair");
-	MeshBuilder::GetInstance()->GenerateQuad("quad", Color(1, 1, 1), 1.f);
-	MeshBuilder::GetInstance()->GetMesh("quad")->textureID = LoadTGA("Image//calibri.tga");
-	MeshBuilder::GetInstance()->GenerateText("text", 16, 16);
-	MeshBuilder::GetInstance()->GetMesh("text")->textureID = LoadTGA("Image//calibri.tga");
-	MeshBuilder::GetInstance()->GetMesh("text")->material.kAmbient.Set(1, 0, 0);
-	MeshBuilder::GetInstance()->GenerateOBJ("Chair", "OBJ//chair.obj");
-	MeshBuilder::GetInstance()->GetMesh("Chair")->textureID = LoadTGA("Image//chair.tga");
-	MeshBuilder::GetInstance()->GenerateRing("ring", Color(1, 0, 1), 36, 1, 0.5f);
-	MeshBuilder::GetInstance()->GenerateSphere("lightball", Color(1, 1, 1), 18, 36, 1.f);
-	MeshBuilder::GetInstance()->GenerateSphere("sphere", Color(1, 0, 0), 18, 36, 0.5f);
-	MeshBuilder::GetInstance()->GenerateCone("cone", Color(0.5f, 1, 0.3f), 36, 10.f, 10.f);
-	MeshBuilder::GetInstance()->GenerateCube("cube", Color(1.0f, 1.0f, 0.0f), 1.0f);
-	MeshBuilder::GetInstance()->GetMesh("cone")->material.kDiffuse.Set(0.99f, 0.99f, 0.99f);
-	MeshBuilder::GetInstance()->GetMesh("cone")->material.kSpecular.Set(0.f, 0.f, 0.f);
-	MeshBuilder::GetInstance()->GenerateQuad("GRASS_DARKGREEN", Color(1, 1, 1), 1.f);
-	MeshBuilder::GetInstance()->GetMesh("GRASS_DARKGREEN")->textureID = LoadTGA("Image//terrain_texture.tga");
-	MeshBuilder::GetInstance()->GenerateQuad("GEO_GRASS_LIGHTGREEN", Color(1, 1, 1), 1.f);
-	MeshBuilder::GetInstance()->GetMesh("GEO_GRASS_LIGHTGREEN")->textureID = LoadTGA("Image//terrain_texture.tga");
-	MeshBuilder::GetInstance()->GenerateCube("cubeSG", Color(0.0f, 1.0f, 1.0f), 1.0f);
-	MeshBuilder::GetInstance()->GenerateCube("cubeBarrel", Color(0.0f, 0.0f, 1.0f), 1.0f);
+	{
+		MeshBuilder::GetInstance()->GenerateAxes("reference");
+		MeshBuilder::GetInstance()->GenerateCrossHair("crosshair");
+		MeshBuilder::GetInstance()->GenerateQuad("quad", Color(1, 1, 1), 1.f);
+		MeshBuilder::GetInstance()->GetMesh("quad")->textureArray[0] = LoadTGA("Image//calibri.tga");
+		MeshBuilder::GetInstance()->GenerateText("text", 16, 16);
+		MeshBuilder::GetInstance()->GetMesh("text")->textureArray[0] = LoadTGA("Image//calibri.tga");
+		MeshBuilder::GetInstance()->GetMesh("text")->material.kAmbient.Set(1, 0, 0);
+		MeshBuilder::GetInstance()->GenerateOBJ("Chair", "OBJ//chair.obj");
+		MeshBuilder::GetInstance()->GetMesh("Chair")->textureArray[0] = LoadTGA("Image//chair.tga");
+		MeshBuilder::GetInstance()->GenerateRing("ring", Color(1, 0, 1), 36, 1, 0.5f);
+		MeshBuilder::GetInstance()->GenerateSphere("lightball", Color(1, 1, 1), 18, 36, 1.f);
+		MeshBuilder::GetInstance()->GenerateSphere("sphere", Color(1, 0, 0), 18, 36, 0.5f);
+		MeshBuilder::GetInstance()->GenerateCone("cone", Color(0.5f, 1, 0.3f), 36, 10.f, 10.f);
+		
+		MeshBuilder::GetInstance()->GenerateCube("cube", Color(1.0f, 1.0f, 0.0f), 1.0f);
 
-	MeshBuilder::GetInstance()->GenerateQuad("SKYBOX_FRONT", Color(1, 1, 1), 1.f);
-	MeshBuilder::GetInstance()->GenerateQuad("SKYBOX_BACK", Color(1, 1, 1), 1.f);
-	MeshBuilder::GetInstance()->GenerateQuad("SKYBOX_LEFT", Color(1, 1, 1), 1.f);
-	MeshBuilder::GetInstance()->GenerateQuad("SKYBOX_RIGHT", Color(1, 1, 1), 1.f);
-	MeshBuilder::GetInstance()->GenerateQuad("SKYBOX_TOP", Color(1, 1, 1), 1.f);
-	MeshBuilder::GetInstance()->GenerateQuad("SKYBOX_BOTTOM", Color(1, 1, 1), 1.f);
-	MeshBuilder::GetInstance()->GetMesh("SKYBOX_FRONT")->textureID = LoadTGA("Image//SkyBox//skybox_front3.tga");
-	MeshBuilder::GetInstance()->GetMesh("SKYBOX_BACK")->textureID = LoadTGA("Image//SkyBox//skybox_back3.tga");
-	MeshBuilder::GetInstance()->GetMesh("SKYBOX_LEFT")->textureID = LoadTGA("Image//SkyBox//skybox_left3.tga");
-	MeshBuilder::GetInstance()->GetMesh("SKYBOX_RIGHT")->textureID = LoadTGA("Image//SkyBox//skybox_right3.tga");
-	MeshBuilder::GetInstance()->GetMesh("SKYBOX_TOP")->textureID = LoadTGA("Image//SkyBox//skybox_top3.tga");
-	MeshBuilder::GetInstance()->GetMesh("SKYBOX_BOTTOM")->textureID = LoadTGA("Image//SkyBox//skybox_bottom3.tga");
-	MeshBuilder::GetInstance()->GenerateRay("laser", 10.0f);
-	MeshBuilder::GetInstance()->GenerateQuad("GRIDMESH", Color(1, 1, 1), 10.f);
+		MeshBuilder::GetInstance()->GenerateOBJ("obj_cube", "OBJ//Cube.obj");
+		MeshBuilder::GetInstance()->GetMesh("obj_cube")->textureArray[0] = LoadTGA("Image//color2.tga");
+		MeshBuilder::GetInstance()->GetMesh("obj_cube")->textureArray[1] = LoadTGA("Image//chair.tga");
+
+		MeshBuilder::GetInstance()->GetMesh("cone")->material.kDiffuse.Set(0.99f, 0.99f, 0.99f);
+		MeshBuilder::GetInstance()->GetMesh("cone")->material.kSpecular.Set(0.f, 0.f, 0.f);
+		MeshBuilder::GetInstance()->GenerateQuad("GRASS_DARKGREEN", Color(1, 1, 1), 1.f);
+		MeshBuilder::GetInstance()->GetMesh("GRASS_DARKGREEN")->textureArray[0] = LoadTGA("Image//terrain_texture.tga");
+		MeshBuilder::GetInstance()->GenerateQuad("GEO_GRASS_LIGHTGREEN", Color(1, 1, 1), 1.f);
+		MeshBuilder::GetInstance()->GetMesh("GEO_GRASS_LIGHTGREEN")->textureArray[0] = LoadTGA("Image//terrain_texture.tga");
+		MeshBuilder::GetInstance()->GenerateCube("cubeSG", Color(0.0f, 1.0f, 1.0f), 1.0f);
+		MeshBuilder::GetInstance()->GenerateCube("cubeBarrel", Color(0.0f, 0.0f, 1.0f), 1.0f);
+
+		MeshBuilder::GetInstance()->GenerateQuad("SKYBOX_FRONT", Color(1, 1, 1), 1.f);
+		MeshBuilder::GetInstance()->GenerateQuad("SKYBOX_BACK", Color(1, 1, 1), 1.f);
+		MeshBuilder::GetInstance()->GenerateQuad("SKYBOX_LEFT", Color(1, 1, 1), 1.f);
+		MeshBuilder::GetInstance()->GenerateQuad("SKYBOX_RIGHT", Color(1, 1, 1), 1.f);
+		MeshBuilder::GetInstance()->GenerateQuad("SKYBOX_TOP", Color(1, 1, 1), 1.f);
+		MeshBuilder::GetInstance()->GenerateQuad("SKYBOX_BOTTOM", Color(1, 1, 1), 1.f);
+		MeshBuilder::GetInstance()->GetMesh("SKYBOX_FRONT")->textureArray[0] = LoadTGA("Image//SkyBox//skybox_front3.tga");
+		MeshBuilder::GetInstance()->GetMesh("SKYBOX_BACK")->textureArray[0] = LoadTGA("Image//SkyBox//skybox_back3.tga");
+		MeshBuilder::GetInstance()->GetMesh("SKYBOX_LEFT")->textureArray[0] = LoadTGA("Image//SkyBox//skybox_left3.tga");
+		MeshBuilder::GetInstance()->GetMesh("SKYBOX_RIGHT")->textureArray[0] = LoadTGA("Image//SkyBox//skybox_right3.tga");
+		MeshBuilder::GetInstance()->GetMesh("SKYBOX_TOP")->textureArray[0] = LoadTGA("Image//SkyBox//skybox_top3.tga");
+		MeshBuilder::GetInstance()->GetMesh("SKYBOX_BOTTOM")->textureArray[0] = LoadTGA("Image//SkyBox//skybox_bottom3.tga");
+		MeshBuilder::GetInstance()->GenerateRay("laser", 10.0f);
+		MeshBuilder::GetInstance()->GenerateQuad("GRIDMESH", Color(1, 1, 1), 10.f);
+	}
 
 	// Set up the Spatial Partition and pass it to the EntityManager to manage
 	CSpatialPartition::GetInstance()->Init(100, 100, 10, 10);

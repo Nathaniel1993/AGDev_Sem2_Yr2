@@ -1,5 +1,6 @@
 #ifndef MESH_H
 #define MESH_H
+#define MAX_TEXTURES 3 // Multi Texture Codes
 
 #include <string>
 #include "Material.h"
@@ -27,6 +28,8 @@ public:
 
 	Material material;
 	unsigned textureID;
+
+	unsigned textureArray[MAX_TEXTURES]; // Define Texture Array (Multi Texture code)
 };
 
 #endif

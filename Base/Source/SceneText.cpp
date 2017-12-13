@@ -293,7 +293,7 @@ void SceneText::Init()
 	theEnemy[0]->SetAABB(Vector3(theEnemy[0]->GetScale().x / 2, theEnemy[0]->GetScale().y / 2, theEnemy[0]->GetScale().z / 2), 
 		Vector3(-(theEnemy[0]->GetScale().x / 2) ,-(theEnemy[0]->GetScale().y / 2), -(theEnemy[0]->GetScale().z / 2)));
 	CSceneNode* theEnemyNode = CSceneGraph::GetInstance()->AddNode(theEnemy[0]);
-	//theEnemy[0]->SetCollider(true);
+	theEnemy[0]->SetCollider(true);
 	/*CUpdateTransformation *enemyBaseMtx = new CUpdateTransformation();
 	enemyBaseMtx->ApplyUpdate(0, 20, 0);
 	enemyBaseMtx->SetSteps(-60, 60);
@@ -308,13 +308,13 @@ void SceneText::Init()
 	theEnemy[1]->Init();
 	theEnemy[1]->InitLOD("cubeSG", "sphere", "cube");
 	theEnemy[1]->SetScale(Vector3(2.5f, 2.5f, 5.f));
-	theEnemy[1]->SetPosition(Vector3(theEnemy[0]->GetPosition().x - 5, theEnemy[0]->GetPosition().y, theEnemy[0]->GetPosition().z + 1));
+	theEnemy[1]->SetPosition(Vector3(theEnemy[0]->GetPos().x - 5, theEnemy[0]->GetPos().y - 2, theEnemy[0]->GetPos().z + 1));
 	theEnemy[1]->SetAABB(Vector3( theEnemy[1]->GetPosition().x + (theEnemy[1]->GetScale().x / 2), 
 								  theEnemy[1]->GetPosition().y + (theEnemy[1]->GetScale().y / 2), 
 								  theEnemy[1]->GetPosition().z + (theEnemy[1]->GetScale().z / 2)),
-						 Vector3(-(theEnemy[1]->GetPosition().x + (theEnemy[1]->GetScale().x / 2)), 
-								 -(theEnemy[1]->GetPosition().y + (theEnemy[1]->GetScale().y / 2)), 
-								 -(theEnemy[1]->GetPosition().z + (theEnemy[1]->GetScale().z / 2))));
+						 Vector3((theEnemy[1]->GetPosition().x - (theEnemy[1]->GetScale().x / 2)), 
+								 (theEnemy[1]->GetPosition().y - (theEnemy[1]->GetScale().y / 2)), 
+								 (theEnemy[1]->GetPosition().z - (theEnemy[1]->GetScale().z / 2))));
 	theEnemy[1]->SetCollider(true);
 	CSceneNode* theEnemyChildNode = theEnemyNode->AddChild(theEnemy[1]);
 	if (theEnemyChildNode == NULL)
@@ -327,8 +327,13 @@ void SceneText::Init()
 	theEnemy[2]->InitLOD("cubeSG", "sphere", "cube");
 	theEnemy[2]->SetScale(Vector3(2.5f, 2.5f, 5.f));
 	theEnemy[2]->SetPosition(Vector3(theEnemy[0]->GetPos().x + 5, theEnemy[0]->GetPos().y - 2, theEnemy[0]->GetPos().z + 1));
-	theEnemy[2]->SetAABB(Vector3(0.1f, 0.1f, 0.1f), Vector3(-0.1f, -0.1f, -0.1f));
-	//theEnemy[2]->SetCollider(true);
+	theEnemy[2]->SetAABB(Vector3(theEnemy[2]->GetPosition().x + (theEnemy[2]->GetScale().x / 2),
+								theEnemy[2]->GetPosition().y + (theEnemy[2]->GetScale().y / 2),
+								theEnemy[2]->GetPosition().z + (theEnemy[2]->GetScale().z / 2)),
+						Vector3((theEnemy[2]->GetPosition().x - (theEnemy[2]->GetScale().x / 2)),
+								(theEnemy[2]->GetPosition().y - (theEnemy[2]->GetScale().y / 2)),
+								(theEnemy[2]->GetPosition().z - (theEnemy[2]->GetScale().z / 2))));
+	theEnemy[2]->SetCollider(true);
 	CSceneNode* theEnemyChildNode2 = theEnemyNode->AddChild(theEnemy[2]);
 	if (theEnemyChildNode2 == NULL)
 	{
@@ -339,9 +344,14 @@ void SceneText::Init()
 	theEnemy[3]->Init();
 	theEnemy[3]->InitLOD("cubeSG", "sphere", "cube");
 	theEnemy[3]->SetScale(Vector3(4.f, 4.f, 4.f));
-	theEnemy[3]->SetPosition(Vector3(theEnemy[0]->GetPos().x, theEnemy[0]->GetPos().y + 10, theEnemy[0]->GetPos().z + 2));
-	theEnemy[3]->SetAABB(Vector3(0.1f, 0.1f, 0.1f), Vector3(-0.1f, -0.1f, -0.1f));
-	//theEnemy[3]->SetCollider(true);
+	theEnemy[3]->SetPosition(Vector3(theEnemy[0]->GetPos().x, theEnemy[0]->GetPos().y + 5, theEnemy[0]->GetPos().z + 1.5));
+	theEnemy[3]->SetAABB(Vector3(theEnemy[3]->GetPosition().x + (theEnemy[3]->GetScale().x / 2),
+								theEnemy[3]->GetPosition().y + (theEnemy[3]->GetScale().y / 2),
+								theEnemy[3]->GetPosition().z + (theEnemy[3]->GetScale().z / 2)),
+						Vector3((theEnemy[3]->GetPosition().x - (theEnemy[3]->GetScale().x / 2)),
+								(theEnemy[3]->GetPosition().y - (theEnemy[3]->GetScale().y / 2)),
+								(theEnemy[3]->GetPosition().z - (theEnemy[3]->GetScale().z / 2))));
+	theEnemy[3]->SetCollider(true);
 	CSceneNode* theEnemyChildNode3 = theEnemyNode->AddChild(theEnemy[3]);
 	if (theEnemyChildNode2 == NULL)
 	{
@@ -443,6 +453,14 @@ void SceneText::Update(double dt)
 	theEnemy[1]->SetPosition(Vector3(theEnemy[0]->GetPos().x - 5, theEnemy[0]->GetPos().y - 2, theEnemy[0]->GetPos().z + 1));
 	theEnemy[2]->SetPosition(Vector3(theEnemy[0]->GetPos().x + 5, theEnemy[0]->GetPos().y - 2, theEnemy[0]->GetPos().z + 1));
 	theEnemy[3]->SetPosition(Vector3(theEnemy[0]->GetPos().x, theEnemy[0]->GetPos().y + 5, theEnemy[0]->GetPos().z + 1.5));
+
+	/*theEnemy[1]->SetAABB(Vector3(theEnemy[1]->GetPos().x + (theEnemy[1]->GetScale().x / 2),
+								theEnemy[1]->GetPos().y + (theEnemy[1]->GetScale().y / 2),
+								theEnemy[1]->GetPos().z + (theEnemy[1]->GetScale().z / 2)),
+						Vector3((theEnemy[1]->GetPos().x - (theEnemy[1]->GetScale().x / 2)),
+								(theEnemy[1]->GetPos().y - (theEnemy[1]->GetScale().y / 2)),
+								(theEnemy[1]->GetPos().z - (theEnemy[1]->GetScale().z / 2))));*/
+
 
 	// Update the player position and other details based on keyboard and mouse inputs
 	playerInfo->Update(dt);

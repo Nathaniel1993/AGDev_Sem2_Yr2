@@ -44,7 +44,7 @@ void CEnemy::Init(void)
 
 	// Initialise the collider
 	this->SetCollider(false);
-	this->SetAABB(Vector3(1, 1, 1), Vector3(-1, -1, -1));
+	//this->SetAABB(Vector3(1, 1, 1), Vector3(-1, -1, -1));
 
 	// Add to the EntityManager
 	CSpatialPartition::GetInstance()->Add(this);

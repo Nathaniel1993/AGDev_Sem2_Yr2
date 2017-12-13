@@ -27,6 +27,7 @@ protected:
 
 	// The mesh to represent the grid
 	Mesh* theMesh;
+	Mesh* selectedMesh;
 
 	// List of objects in this grid
 	vector<EntityBase*> ListOfObjects;

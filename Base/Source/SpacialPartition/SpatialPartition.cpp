@@ -203,20 +203,28 @@ void CSpatialPartition::Render(Vector3* theCameraPosition)
 	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
 	modelStack.PushMatrix();
 	modelStack.Translate(0.0f, yOffset, 0.0f);
-	for (int i = 0; i<xNumOfGrid; i++)
+	/*for (int i = 0; i<xNumOfGrid; i++)
 	{
 		for (int j = 0; j<zNumOfGrid; j++)
 		{
 			modelStack.PushMatrix();
 			modelStack.Translate(xGridSize * i - (xSize >> 1), 0.0f, zGridSize * j - (zSize >> 1));
 			modelStack.PushMatrix();
-			modelStack.Scale(xGridSize, 1.0f, zGridSize);
+			modelStack.Scale(xGridSize / 10.f, 1.0f, zGridSize / 10.f);
 			modelStack.Rotate(-90, 1, 0, 0);
 			theGrid[i*zNumOfGrid + j].Render();
 			modelStack.PopMatrix();
 			modelStack.PopMatrix();
 		}
-	}
+	}*/
+	modelStack.PushMatrix();
+	//modelStack.Translate(xGridSize * i - (xSize >> 1), 0.0f, zGridSize * j - (zSize >> 1));
+	modelStack.PushMatrix();
+	modelStack.Scale(xGridSize, 1.0f, zGridSize);
+	modelStack.Rotate(-90, 1, 0, 0);
+	theGrid[0].Render();
+	modelStack.PopMatrix();
+	modelStack.PopMatrix();
 	modelStack.PopMatrix();
 }
 

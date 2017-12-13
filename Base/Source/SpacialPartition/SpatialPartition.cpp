@@ -217,14 +217,13 @@ void CSpatialPartition::Render(Vector3* theCameraPosition)
 			modelStack.PopMatrix();
 		}
 	}*/
-	modelStack.PushMatrix();
-	//modelStack.Translate(xGridSize * i - (xSize >> 1), 0.0f, zGridSize * j - (zSize >> 1));
-	modelStack.PushMatrix();
-	modelStack.Scale(xGridSize, 1.0f, zGridSize);
-	modelStack.Rotate(-90, 1, 0, 0);
-	theGrid[0].Render();
-	modelStack.PopMatrix();
-	modelStack.PopMatrix();
+		modelStack.PushMatrix();
+			modelStack.PushMatrix();
+			modelStack.Scale(xGridSize, 1.0f, zGridSize);
+			modelStack.Rotate(-90, 1, 0, 0);
+			theGrid[0].Render();
+			modelStack.PopMatrix();
+		modelStack.PopMatrix();
 	modelStack.PopMatrix();
 }
 

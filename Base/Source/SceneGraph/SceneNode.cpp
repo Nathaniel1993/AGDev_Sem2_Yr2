@@ -354,7 +354,7 @@ void CSceneNode::Render(void)
 
 
 		// Render the entity
-		theEntity->Render();
+		//theEntity->Render();
 	}
 
 	// Render the children

@@ -289,19 +289,16 @@ void SceneText::Init()
 	theEnemy[0] = new CEnemy();
 	theEnemy[0]->Init();
 	theEnemy[0]->SetScale(Vector3(5.f, 5.f, 7.f));
+	theEnemy[0]->SetPosition(Vector3(0, 0, -20));
 	theEnemy[0]->SetAABB(Vector3(theEnemy[0]->GetScale().x / 2, theEnemy[0]->GetScale().y / 2, theEnemy[0]->GetScale().z / 2), 
 		Vector3(-(theEnemy[0]->GetScale().x / 2) ,-(theEnemy[0]->GetScale().y / 2), -(theEnemy[0]->GetScale().z / 2)));
 	CSceneNode* theEnemyNode = CSceneGraph::GetInstance()->AddNode(theEnemy[0]);
 	theEnemy[0]->SetCollider(true);
-	/*CUpdateTransformation *enemyBaseMtx = new CUpdateTransformation();
-	enemyBaseMtx->ApplyUpdate(0, 20, 0);
-	enemyBaseMtx->SetSteps(-60, 60);
-	theEnemyNode->SetUpdateTransformation(enemyBaseMtx);*/
-
 	if (theEnemyNode == NULL)
 	{
 		cout << "EntityManager::AddEntity: Unable to add to scene graph!" << endl;
 	}
+
 	theEnemy.push_back(theEnemyList);
 	theEnemy[1] = new CEnemy();
 	theEnemy[1]->Init();
@@ -320,6 +317,7 @@ void SceneText::Init()
 	{
 		cout << "EntityManager::AddEntity: Unable to add to scene graph!" << endl;
 	}
+
 	theEnemy.push_back(theEnemyList);
 	theEnemy[2] = new CEnemy();
 	theEnemy[2]->Init();
@@ -352,11 +350,24 @@ void SceneText::Init()
 								(theEnemy[3]->GetPosition().z - (theEnemy[3]->GetScale().z / 2))));
 	theEnemy[3]->SetCollider(true);
 	CSceneNode* theEnemyChildNode3 = theEnemyNode->AddChild(theEnemy[3]);
-	if (theEnemyChildNode2 == NULL)
+	//theEnemyChildNode3->ApplyTranslate(0.0f, 0.0f, 0.0f);
+	if (theEnemyChildNode3 == NULL)
 	{
 		cout << "EntityManager::AddEntity: Unable to add to scene graph!" << endl;
 	}
-
+	// ======================= NEED TO FIX THIS ==========================
+	theEnemy.push_back(theEnemyList);
+	theEnemy[4] = new CEnemy();
+	theEnemy[4]->Init();
+	theEnemy[4]->InitLOD("cube", "sphere", "cube");
+	theEnemy[4]->SetScale(Vector3(4.f, 4.f, 4.f));
+	CSceneNode* theEnemyChildNode4 = theEnemyChildNode3->AddChild(theEnemy[4]);
+	theEnemyChildNode4->ApplyTranslate(theEnemy[3]->GetPos().x, theEnemy[3]->GetPos().y, theEnemy[3]->GetPos().z);
+	CUpdateTransformation* bRotateMtx = new CUpdateTransformation();
+	bRotateMtx->ApplyUpdate(1.0f, 0.0f, 1.0f, 0.0f);
+	bRotateMtx->SetSteps(-60, 60);
+	theEnemyChildNode4->SetUpdateTransformation(bRotateMtx);
+	// ===================================================================
 
 	groundEntity = Create::Ground("GRASS_DARKGREEN", "GEO_GRASS_LIGHTGREEN");
 	//	Create::Text3DObject("text", Vector3(0.0f, 0.0f, 0.0f), "DM2210", Vector3(10.0f, 10.0f, 10.0f), Color(0, 1, 1));

@@ -27,7 +27,7 @@ void EntityManager::Render()
 	}
 
 	// Render the Scene Graph
-	// CSceneGraph::GetInstance()->Render();
+	CSceneGraph::GetInstance()->Render();
 
 	// Render the Spatial Partition
 	if (theSpatialPartition)

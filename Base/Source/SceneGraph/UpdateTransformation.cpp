@@ -32,12 +32,7 @@ void CUpdateTransformation::Update(void)
 	}
 }
 
-// Apply a translation to the Update Transformation Matrix
-void CUpdateTransformation::ApplyUpdate(const float dx, const float dy, const float dz)
-{
-	Update_Mtx.SetToTranslation(dx, dy, dz);
-	Update_Mtx_REVERSED.SetToTranslation(-dx, -dy, -dz);
-}
+
 
 // Apply a rotation to the Update Transformation Matrix
 void CUpdateTransformation::ApplyUpdate(const float angle, const float rx, const float ry, const float rz)
@@ -45,7 +40,12 @@ void CUpdateTransformation::ApplyUpdate(const float angle, const float rx, const
 	Update_Mtx.SetToRotation(angle, rx, ry, rz);
 	Update_Mtx_REVERSED.SetToRotation(-angle, rx, ry, rz);
 }
-
+// Apply a translation to the Update Transformation Matrix
+void CUpdateTransformation::ApplyUpdate(const float dx, const float dy, const float dz)
+{
+	Update_Mtx.SetToTranslation(dx, dy, dz);
+	Update_Mtx_REVERSED.SetToTranslation(-dx, -dy, -dz);
+}
 // Set the minSteps and maxSteps
 void CUpdateTransformation::SetSteps(const int minSteps, const int maxSteps)
 {

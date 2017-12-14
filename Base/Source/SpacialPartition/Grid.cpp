@@ -90,9 +90,9 @@ void CGrid::Render(void)
 {
 	if (theMesh)
 	{
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		RenderHelper::RenderMesh(theMesh);
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	}
 }
 

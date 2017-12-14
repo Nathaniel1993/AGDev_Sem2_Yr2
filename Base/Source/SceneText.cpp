@@ -182,6 +182,7 @@ void SceneText::Init()
 		MeshBuilder::GetInstance()->GetMesh("SKYBOX_BOTTOM")->textureArray[0] = LoadTGA("Image//SkyBox//skybox_bottom3.tga");
 		MeshBuilder::GetInstance()->GenerateRay("laser", 10.0f);
 		MeshBuilder::GetInstance()->GenerateQuad("GRIDMESH", Color(1, 1, 1), 10.f);
+		MeshBuilder::GetInstance()->GetMesh("GRIDMESH")->textureArray[0] = LoadTGA("Image//GridWhole.tga");
 	}
 
 	// Set up the Spatial Partition and pass it to the EntityManager to manage

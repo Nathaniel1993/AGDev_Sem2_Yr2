@@ -389,18 +389,26 @@ bool CGrid::CheckForCollision(void)
 						thatMinAABB, thatMaxAABB,
 						hitPosition) == true)
 					{
-						(*colliderThis)->SetIsDone(true);
-						(*colliderThat)->SetIsDone(true);
+						if (!thisEntity->GetIsSelector())
+						{
+							(*colliderThis)->SetIsDone(true);
+							(*colliderThat)->SetIsDone(true);
 
-						// Remove from Scene Graph
-						if (CSceneGraph::GetInstance()->DeleteNode((*colliderThis)) == true)
-						{
-							cout << "*** This Entity removed ***" << endl;
+							// Remove from Scene Graph
+							if (CSceneGraph::GetInstance()->DeleteNode((*colliderThis)) == true)
+							{
+								cout << "*** This Entity removed ***" << endl;
+							}
+							//Remove from Scene Graph
+							if (CSceneGraph::GetInstance()->DeleteNode((*colliderThat)) == true)
+							{
+								cout << "*** That Entity removed ***" << endl;
+							}
 						}
-						//Remove from Scene Graph
-						if (CSceneGraph::GetInstance()->DeleteNode((*colliderThat)) == true)
+						else
 						{
-							cout << "*** That Entity removed ***" << endl;
+							(*colliderThis)->SetIsDone(true);
+							CSceneGraph::GetInstance()->theRoot->FindEntityForSelect(CSceneGraph::GetInstance()->GetNode(*colliderThat));
 						}
 					}
 				}

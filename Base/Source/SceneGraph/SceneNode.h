@@ -60,6 +60,10 @@ public:
 	// PrintSelf for debug purposes
 	void PrintSelf(const int numTabs = 0);
 
+	bool FindEntityForSelect(CSceneNode* theNode);
+	void SetParentSelected(CSceneNode* theNode);
+	void SetChildrenSelected(CSceneNode* theNode);
+
 protected:
 	int ID;
 	EntityBase* theEntity;

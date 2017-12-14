@@ -5,7 +5,7 @@
 #include "MatrixStack.h"
 #include <sstream>
 
-void RenderHelper::RenderMesh(Mesh* _mesh)
+void RenderHelper::RenderMesh(Mesh* _mesh, bool _selectedGrid, bool _selectedGun)
 {
 	// Get all our transform matrices & update shader
 	Mtx44 MVP;
@@ -18,16 +18,27 @@ void RenderHelper::RenderMesh(Mesh* _mesh)
 
 	for (int i = 0; i < MAX_TEXTURES; ++i)
 	{
+		if (i == 1 && !_selectedGrid)
+		{
+			currProg->UpdateInt("colorTextureEnabled[1]", 0);
+			continue;
+		}
+		if (i == 2 && !_selectedGun)
+		{
+			currProg->UpdateInt("colorTextureEnabled[2]", 0);
+			continue;
+		}
+
 		std::string colorTextureEnabled = "colorTextureEnabled[";
 		colorTextureEnabled += std::to_string(i) + "]";
-		
+
 		std::string colorTexture = "colorTexture[";
 		colorTexture += std::to_string(i) + "]";
-		
+
 		if (_mesh->textureArray[i] > 0)
 		{
 			currProg->UpdateInt(colorTextureEnabled, 1);
-			GraphicsManager::GetInstance()->UpdateTexture(i, _mesh->textureArray[i]); 
+			GraphicsManager::GetInstance()->UpdateTexture(i, _mesh->textureArray[i]);
 			currProg->UpdateInt(colorTexture, i);
 		}
 		else
@@ -40,7 +51,7 @@ void RenderHelper::RenderMesh(Mesh* _mesh)
 	_mesh->Render();
 
 	// Unbind texture for safety (in case next render call uses it by accident)
-	/*if (_mesh->textureID > 0)
+	/*if (_mesh->textureArray[0] > 0)
 	{
 		GraphicsManager::GetInstance()->UnbindTexture(0);
 	}*/

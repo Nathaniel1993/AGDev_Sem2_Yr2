@@ -1,7 +1,9 @@
 #include "SpatialPartition.h"
 #include "GraphicsManager.h"
 #include "RenderHelper.h"
+#include "MeshBuilder.h"
 #include "../SceneGraph\SceneGraph.h"
+#include "KeyboardController.h"
 
 CSpatialPartition *CSpatialPartition::sp_instance = 0;
 
@@ -16,6 +18,10 @@ CSpatialPartition::CSpatialPartition(void)
 	, yOffset(0.0f)
 	, _meshName("")
 	, theCamera(NULL)
+	, selectedGrid(0)
+	, prevGrid(0)
+	, gridChanged(true)
+	, selectedGridMesh(NULL)
 {
 }
 
@@ -23,6 +29,12 @@ CSpatialPartition::~CSpatialPartition(void)
 {
 	theCamera = NULL;
 	delete[] theGrid;
+
+	if (selectedGridMesh)
+	{
+		delete selectedGridMesh;
+		selectedGridMesh = NULL;
+	}
 }
 
 /********************************************************************************
@@ -66,6 +78,8 @@ Update the spatial partition
 ********************************************************************************/
 void CSpatialPartition::Update(double _dt)
 {
+	GridSelection();
+
 	// Update all entities
 	for (int i = 0; i<xNumOfGrid; i++)
 	{
@@ -202,29 +216,29 @@ void CSpatialPartition::Render(Vector3* theCameraPosition)
 	// Render the Spatial Partitions
 	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
 	modelStack.PushMatrix();
-	modelStack.Translate(0.0f, yOffset, 0.0f);
-	/*for (int i = 0; i<xNumOfGrid; i++)
-	{
-		for (int j = 0; j<zNumOfGrid; j++)
-		{
-			modelStack.PushMatrix();
-			modelStack.Translate(xGridSize * i - (xSize >> 1), 0.0f, zGridSize * j - (zSize >> 1));
-			modelStack.PushMatrix();
-			modelStack.Scale(xGridSize / 10.f, 1.0f, zGridSize / 10.f);
-			modelStack.Rotate(-90, 1, 0, 0);
-			theGrid[i*zNumOfGrid + j].Render();
-			modelStack.PopMatrix();
-			modelStack.PopMatrix();
-		}
-	}*/
+		modelStack.Translate(0.0f, yOffset, 0.0f);
 		modelStack.PushMatrix();
-			modelStack.PushMatrix();
 			modelStack.Scale(xGridSize, 1.0f, zGridSize);
 			modelStack.Rotate(-90, 1, 0, 0);
 			theGrid[0].Render();
+		modelStack.PopMatrix();
+	modelStack.PopMatrix();
+
+	float xPos = (float)(xGridSize * (selectedGrid / xNumOfGrid) - (xSize >> 1) + (xGridSize / 2));
+	float zPos = (float)(zGridSize * (selectedGrid % zNumOfGrid) - (zSize >> 1) + (zGridSize / 2));
+
+	modelStack.PushMatrix();
+		modelStack.Translate(0.0f, yOffset + 0.1f, 0.0f);
+		modelStack.PushMatrix();
+			modelStack.Translate(xPos, 0.f, zPos);
+			modelStack.PushMatrix();
+				modelStack.Scale((float)(xGridSize / xNumOfGrid), 1.0f, (float)(zGridSize / zNumOfGrid));
+				modelStack.Rotate(-90, 1, 0, 0);
+				RenderHelper::RenderMesh(selectedGridMesh, true);
 			modelStack.PopMatrix();
 		modelStack.PopMatrix();
 	modelStack.PopMatrix();
+	
 }
 
 /********************************************************************************
@@ -248,6 +262,15 @@ void CSpatialPartition::SetMesh(const std::string& _meshName)
 
 	// Assign a Mesh to each Grid if available.
 	ApplyMesh();
+}
+
+void CSpatialPartition::SetSelectedGridMesh(const std::string & _meshName)
+{
+	Mesh* modelMesh = MeshBuilder::GetInstance()->GetMesh(_meshName);
+	if (modelMesh != nullptr)
+	{
+		this->selectedGridMesh = MeshBuilder::GetInstance()->GetMesh(_meshName);
+	}
 }
 
 void CSpatialPartition::ApplyMesh(void)
@@ -385,4 +408,62 @@ bool CSpatialPartition::IsVisible(Vector3 theCameraPosition, Vector3 theCameraDi
 	if (theCameraDirection.Dot(gridCentre) < 0)
 		return false;
 	return true;
+}
+
+void CSpatialPartition::GridSelection()
+{
+	gridChanged = false;
+	if (KeyboardController::GetInstance()->IsKeyReleased('L'))
+	{ // Z Plus
+		int zAxis = selectedGrid % zNumOfGrid;
+		if (zAxis + 1 < zNumOfGrid)
+		{
+			prevGrid = selectedGrid;
+			++selectedGrid;
+			gridChanged = true;
+		}
+	}
+	if (KeyboardController::GetInstance()->IsKeyReleased('J'))
+	{ // Z Minus
+		int zAxis = selectedGrid % zNumOfGrid;
+		if (zAxis - 1 >= 0)
+		{
+			prevGrid = selectedGrid;
+			--selectedGrid;
+			gridChanged = true;
+		}
+	}
+	if (KeyboardController::GetInstance()->IsKeyReleased('I'))
+	{ // X Plus
+		int xAxis = selectedGrid / xNumOfGrid;
+		if (xAxis + 1 < xNumOfGrid)
+		{
+			prevGrid = selectedGrid;
+			selectedGrid += zNumOfGrid;
+			gridChanged = true;
+		}
+	}
+	if (KeyboardController::GetInstance()->IsKeyReleased('K'))
+	{ // X Minus
+		int xAxis = selectedGrid / xNumOfGrid;
+		if (xAxis - 1 >= 0)
+		{
+			prevGrid = selectedGrid;
+			selectedGrid -= zNumOfGrid;
+			gridChanged = true;
+		}
+	}
+
+	if (gridChanged)
+	{
+		for (int i = 0; i < theGrid[prevGrid].GetListOfObject().size(); i++)
+		{
+			theGrid[prevGrid].GetListOfObject()[i]->SetSelectedGrid(false);
+		}
+		
+		for (int i = 0; i < theGrid[selectedGrid].GetListOfObject().size(); i++)
+		{
+			theGrid[selectedGrid].GetListOfObject()[i]->SetSelectedGrid(true);
+		}
+	}
 }

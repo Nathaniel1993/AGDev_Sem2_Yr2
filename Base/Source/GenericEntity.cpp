@@ -27,10 +27,10 @@ void GenericEntity::Render()
 	if (GetLODStatus() == true)
 	{
 		if (theDetailLevel != NO_DETAILS)
-			RenderHelper::RenderMesh(GetLODMesh());
+			RenderHelper::RenderMesh(GetLODMesh(), selected_Grid, selected_Gun);
 	}
 	else
-		RenderHelper::RenderMesh(modelMesh);
+		RenderHelper::RenderMesh(modelMesh, selected_Grid, selected_Gun);
 
 	modelStack.PopMatrix();
 }

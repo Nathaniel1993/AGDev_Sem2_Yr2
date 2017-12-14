@@ -81,19 +81,9 @@ void SceneText::Init()
 		currProg->AddUniform("colorTextureEnabled[0]");
 		currProg->AddUniform("colorTextureEnabled[1]");
 		currProg->AddUniform("colorTextureEnabled[2]");
-		currProg->AddUniform("colorTextureEnabled[3]");
-		currProg->AddUniform("colorTextureEnabled[4]");
-		currProg->AddUniform("colorTextureEnabled[5]");
-		currProg->AddUniform("colorTextureEnabled[6]");
-		currProg->AddUniform("colorTextureEnabled[7]");
 		currProg->AddUniform("colorTexture[0]");
 		currProg->AddUniform("colorTexture[1]");
 		currProg->AddUniform("colorTexture[2]");
-		currProg->AddUniform("colorTexture[3]");
-		currProg->AddUniform("colorTexture[4]");
-		currProg->AddUniform("colorTexture[5]");
-		currProg->AddUniform("colorTexture[6]");
-		currProg->AddUniform("colorTexture[7]");
 		currProg->AddUniform("textEnabled");
 		currProg->AddUniform("textColor");
 	}
@@ -157,7 +147,8 @@ void SceneText::Init()
 
 		MeshBuilder::GetInstance()->GenerateOBJ("obj_cube", "OBJ//Cube.obj");
 		MeshBuilder::GetInstance()->GetMesh("obj_cube")->textureArray[0] = LoadTGA("Image//color2.tga");
-		MeshBuilder::GetInstance()->GetMesh("obj_cube")->textureArray[1] = LoadTGA("Image//chair.tga");
+		MeshBuilder::GetInstance()->GetMesh("obj_cube")->textureArray[1] = LoadTGA("Image//Red.tga");
+		MeshBuilder::GetInstance()->GetMesh("obj_cube")->textureArray[2] = LoadTGA("Image//LightGreen.tga");
 
 		MeshBuilder::GetInstance()->GetMesh("cone")->material.kDiffuse.Set(0.99f, 0.99f, 0.99f);
 		MeshBuilder::GetInstance()->GetMesh("cone")->material.kSpecular.Set(0.f, 0.f, 0.f);
@@ -168,6 +159,7 @@ void SceneText::Init()
 		MeshBuilder::GetInstance()->GenerateCube("cubeSG", Color(0.0f, 1.0f, 1.0f), 1.0f);
 		MeshBuilder::GetInstance()->GenerateCube("cubeBarrel", Color(0.0f, 0.0f, 1.0f), 1.0f);
 
+		// Skybox
 		MeshBuilder::GetInstance()->GenerateQuad("SKYBOX_FRONT", Color(1, 1, 1), 1.f);
 		MeshBuilder::GetInstance()->GenerateQuad("SKYBOX_BACK", Color(1, 1, 1), 1.f);
 		MeshBuilder::GetInstance()->GenerateQuad("SKYBOX_LEFT", Color(1, 1, 1), 1.f);
@@ -180,21 +172,33 @@ void SceneText::Init()
 		MeshBuilder::GetInstance()->GetMesh("SKYBOX_RIGHT")->textureArray[0] = LoadTGA("Image//SkyBox//skybox_right3.tga");
 		MeshBuilder::GetInstance()->GetMesh("SKYBOX_TOP")->textureArray[0] = LoadTGA("Image//SkyBox//skybox_top3.tga");
 		MeshBuilder::GetInstance()->GetMesh("SKYBOX_BOTTOM")->textureArray[0] = LoadTGA("Image//SkyBox//skybox_bottom3.tga");
-		MeshBuilder::GetInstance()->GenerateRay("laser", 10.0f);
+		
+		// Laser
+		MeshBuilder::GetInstance()->GenerateRay("laser", Color(1.f, 0.f, 0.f), 10.0f);
+
+		MeshBuilder::GetInstance()->GenerateRay("selector", Color(0.5f, 1.f, 0.5f), 10.0f);
+		
+		// Grid Mesh
 		MeshBuilder::GetInstance()->GenerateQuad("GRIDMESH", Color(1, 1, 1), 10.f);
 		MeshBuilder::GetInstance()->GetMesh("GRIDMESH")->textureArray[0] = LoadTGA("Image//GridWhole.tga");
+
+		// Selected Grid Mesh
+		MeshBuilder::GetInstance()->GenerateQuad("SelectedGrid", Color(1, 1, 1), 10.f);
+		MeshBuilder::GetInstance()->GetMesh("SelectedGrid")->textureArray[0] = LoadTGA("Image//Grid.tga");
+		MeshBuilder::GetInstance()->GetMesh("SelectedGrid")->textureArray[1] = LoadTGA("Image//Red.tga");
 	}
 
 	// Set up the Spatial Partition and pass it to the EntityManager to manage
 	CSpatialPartition::GetInstance()->Init(100, 100, 10, 10);
 	CSpatialPartition::GetInstance()->SetMesh("GRIDMESH");
+	CSpatialPartition::GetInstance()->SetSelectedGridMesh("SelectedGrid");
 	CSpatialPartition::GetInstance()->SetCamera(&camera);
 	CSpatialPartition::GetInstance()->SetLevelOfDetails(40000.0f, 160000.0f);
 	EntityManager::GetInstance()->SetSpatialPartition(CSpatialPartition::GetInstance());
 
 	// Create entities into the scene
-	Create::Entity("reference", Vector3(0.0f, 0.0f, 0.0f)); // Reference
-	Create::Entity("lightball", Vector3(lights[0]->position.x, lights[0]->position.y, lights[0]->position.z)); // Lightball
+	Create::Asset("reference", Vector3(0.0f, 0.0f, 0.0f)); // Reference
+	Create::Asset("lightball", Vector3(lights[0]->position.x, lights[0]->position.y, lights[0]->position.z)); // Lightball
 
 	// ==================== Target cube ======================
 	// Parent
@@ -293,6 +297,7 @@ void SceneText::Init()
 	theEnemy[0]->SetAABB(Vector3(theEnemy[0]->GetScale().x / 2, theEnemy[0]->GetScale().y / 2, theEnemy[0]->GetScale().z / 2), 
 		Vector3(-(theEnemy[0]->GetScale().x / 2) ,-(theEnemy[0]->GetScale().y / 2), -(theEnemy[0]->GetScale().z / 2)));
 	CSceneNode* theEnemyNode = CSceneGraph::GetInstance()->AddNode(theEnemy[0]);
+	theEnemy[0]->InitLOD("obj_cube", "sphere", "cube");
 	theEnemy[0]->SetCollider(true);
 	/*CUpdateTransformation *enemyBaseMtx = new CUpdateTransformation();
 	enemyBaseMtx->ApplyUpdate(0, 20, 0);
@@ -306,7 +311,7 @@ void SceneText::Init()
 	theEnemy.push_back(theEnemyList);
 	theEnemy[1] = new CEnemy();
 	theEnemy[1]->Init();
-	theEnemy[1]->InitLOD("cubeSG", "sphere", "cube");
+	theEnemy[1]->InitLOD("obj_cube", "sphere", "cube");
 	theEnemy[1]->SetScale(Vector3(2.5f, 2.5f, 5.f));
 	theEnemy[1]->SetPosition(Vector3(theEnemy[0]->GetPos().x - 5, theEnemy[0]->GetPos().y - 2, theEnemy[0]->GetPos().z + 1));
 	theEnemy[1]->SetAABB(Vector3( theEnemy[1]->GetPosition().x + (theEnemy[1]->GetScale().x / 2), 
@@ -324,7 +329,7 @@ void SceneText::Init()
 	theEnemy.push_back(theEnemyList);
 	theEnemy[2] = new CEnemy();
 	theEnemy[2]->Init();
-	theEnemy[2]->InitLOD("cubeSG", "sphere", "cube");
+	theEnemy[2]->InitLOD("obj_cube", "sphere", "cube");
 	theEnemy[2]->SetScale(Vector3(2.5f, 2.5f, 5.f));
 	theEnemy[2]->SetPosition(Vector3(theEnemy[0]->GetPos().x + 5, theEnemy[0]->GetPos().y - 2, theEnemy[0]->GetPos().z + 1));
 	theEnemy[2]->SetAABB(Vector3(theEnemy[2]->GetPosition().x + (theEnemy[2]->GetScale().x / 2),
@@ -342,7 +347,7 @@ void SceneText::Init()
 	theEnemy.push_back(theEnemyList);
 	theEnemy[3] = new CEnemy();
 	theEnemy[3]->Init();
-	theEnemy[3]->InitLOD("cubeSG", "sphere", "cube");
+	theEnemy[3]->InitLOD("obj_cube", "sphere", "cube");
 	theEnemy[3]->SetScale(Vector3(4.f, 4.f, 4.f));
 	theEnemy[3]->SetPosition(Vector3(theEnemy[0]->GetPos().x, theEnemy[0]->GetPos().y + 5, theEnemy[0]->GetPos().z + 1.5));
 	theEnemy[3]->SetAABB(Vector3(theEnemy[3]->GetPosition().x + (theEnemy[3]->GetScale().x / 2),
@@ -389,7 +394,7 @@ void SceneText::Init()
 void SceneText::Update(double dt)
 {
 	// Update our entities
-	EntityManager::GetInstance()->Update(dt);
+	CSpatialPartition::GetInstance()->Update(dt);
 
 	// THIS WHOLE CHUNK TILL <THERE> CAN REMOVE INTO ENTITIES LOGIC! Or maybe into a scene function to keep the update clean
 	if (KeyboardController::GetInstance()->IsKeyDown('1'))
@@ -413,19 +418,6 @@ void SceneText::Update(double dt)
 	{
 		lights[0]->type = Light::LIGHT_SPOT;
 	}
-
-	if (KeyboardController::GetInstance()->IsKeyDown('I'))
-		lights[0]->position.z -= (float)(10.f * dt);
-	if (KeyboardController::GetInstance()->IsKeyDown('K'))
-		lights[0]->position.z += (float)(10.f * dt);
-	if (KeyboardController::GetInstance()->IsKeyDown('J'))
-		lights[0]->position.x -= (float)(10.f * dt);
-	if (KeyboardController::GetInstance()->IsKeyDown('L'))
-		lights[0]->position.x += (float)(10.f * dt);
-	if (KeyboardController::GetInstance()->IsKeyDown('O'))
-		lights[0]->position.y -= (float)(10.f * dt);
-	if (KeyboardController::GetInstance()->IsKeyDown('P'))
-		lights[0]->position.y += (float)(10.f * dt);
 
 	// if the left mouse button was released
 	if (MouseController::GetInstance()->IsButtonReleased(MouseController::LMB))
@@ -493,6 +485,7 @@ void SceneText::Render()
 	GraphicsManager::GetInstance()->SetPerspectiveProjection(45.0f, 4.0f / 3.0f, 0.1f, 10000.0f);
 	GraphicsManager::GetInstance()->AttachCamera(&camera);
 	EntityManager::GetInstance()->Render();
+	CSpatialPartition::GetInstance()->Render();
 
 	// Setup 2D pipeline then render 2D
 	int halfWindowWidth = Application::GetInstance().GetWindowWidth() / 2;

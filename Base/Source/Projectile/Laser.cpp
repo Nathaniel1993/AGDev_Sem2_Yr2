@@ -105,7 +105,7 @@ void CLaser::Render(void)
 				modelStack.PushMatrix();
 					modelStack.Rotate(180 / Math::PI * angle_y, 1.0f, 0.0f, 0.0f);
 					glLineWidth(5.0f);
-					RenderHelper::RenderMesh(modelMesh);
+					RenderHelper::RenderMesh(modelMesh, selected_Grid, selected_Gun);
 					glLineWidth(1.0f);
 				modelStack.PopMatrix();
 			modelStack.PopMatrix();

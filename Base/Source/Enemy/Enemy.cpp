@@ -151,7 +151,7 @@ void CEnemy::Render(void)
 	{
 		if (theDetailLevel != NO_DETAILS)
 		{
-			RenderHelper::RenderMesh(GetLODMesh());
+			RenderHelper::RenderMesh(GetLODMesh(), selected_Grid, selected_Gun);
 		}
 	}
 	modelStack.PopMatrix();

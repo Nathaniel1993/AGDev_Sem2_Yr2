@@ -400,3 +400,55 @@ void CSceneNode::PrintSelf(const int numTabs)
 		}
 	} 
 }
+
+bool CSceneNode::FindEntityForSelect(CSceneNode* theNode)
+{
+	if (this == theNode)
+	{
+		if (this->theParent->GetID() != 0)
+		{
+			SetParentSelected(this->theParent);
+		}
+		else
+		{
+			SetChildrenSelected(theNode);
+			theNode->GetEntity()->SetSelectedGun(!theNode->GetEntity()->GetSelectedGun());
+		}
+		return true;
+	}
+	else
+	{
+		if (theChildren.size() != 0)
+		{
+			std::vector<CSceneNode*>::iterator it = theChildren.begin();
+			while (it != theChildren.end())
+			{
+				if ((*it)->FindEntityForSelect(*it))
+					break;
+			}
+		}
+	}
+	return false;
+}
+
+void CSceneNode::SetParentSelected(CSceneNode * theNode)
+{
+	if (theNode->theParent == CSceneGraph::GetInstance()->theRoot)
+	{
+		SetChildrenSelected(theNode);
+		theNode->GetEntity()->SetSelectedGun(!theNode->GetEntity()->GetSelectedGun());
+		return;
+	}
+	SetParentSelected(theNode->theParent);
+}
+
+void CSceneNode::SetChildrenSelected(CSceneNode * theNode)
+{
+	vector <CSceneNode*>::iterator it = theNode->theChildren.begin();
+	while (it != theNode->theChildren.end())
+	{
+		SetChildrenSelected(*it);
+		(*it)->GetEntity()->SetSelectedGun(!(*it)->GetEntity()->GetSelectedGun());
+		++it;
+	}
+}

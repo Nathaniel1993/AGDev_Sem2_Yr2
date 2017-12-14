@@ -4,6 +4,7 @@
 #include "EntityBase.h"
 #include "../FPSCamera.h"
 
+class Mesh;
 
 class CSpatialPartition
 {
@@ -25,6 +26,11 @@ protected:
 
 	FPSCamera* theCamera;
 	float LevelOfDetails_Distances[2];
+
+	int selectedGrid;
+	int prevGrid;
+	bool gridChanged;
+	Mesh* selectedGridMesh;
 
 public:
 	static CSpatialPartition *GetInstance()
@@ -53,6 +59,8 @@ public:
 
 	// Set a particular grid's Mesh
 	void SetMesh(const std::string& _meshName);
+	// Set selected grid's Mesh
+	void SetSelectedGridMesh(const std::string& _meshName);
 
 	// Apply Mesh
 	void ApplyMesh(void);
@@ -86,7 +94,7 @@ public:
 	// Remove but not delete object from this grid
 	void Remove(EntityBase* theObject);
 
-	// Calculate the square ddistance from camera to a grid's centrepoint
+	// Calculate the square distance from camera to a grid's centrepoint
 	float CalculateDistanceSquare(Vector3* theCameraPosition, const int xIndex, const int zIndex);
 
 	// PrintSelf
@@ -103,4 +111,6 @@ public:
 	void SetLevelOfDetails(const float distance_High2Mid, const float distance_Mid2Low);
 	// Check if a CGrid is visible to the camera
 	bool IsVisible(Vector3 theCameraPosition, Vector3 theCameraDirection, const int xIndex, const int zIndex);
+
+	void GridSelection();
 };

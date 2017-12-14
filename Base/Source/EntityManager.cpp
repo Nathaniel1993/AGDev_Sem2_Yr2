@@ -10,28 +10,18 @@ using namespace std;
 // Update all entities
 void EntityManager::Update(double _dt)
 {
-	// Update the Spatial Partition
-	if (theSpatialPartition)
-		theSpatialPartition->Update(_dt);
 }
 
 // Render all entities
 void EntityManager::Render()
 {
-	// Render all entities
+	// Render all assets
 	std::list<EntityBase*>::iterator it, end;
 	end = entityList.end();
 	for (it = entityList.begin(); it != end; ++it)
 	{
 		(*it)->Render();
 	}
-
-	// Render the Scene Graph
-	// CSceneGraph::GetInstance()->Render();
-
-	// Render the Spatial Partition
-	if (theSpatialPartition)
-		theSpatialPartition->Render();
 }
 
 // Render the UI entities

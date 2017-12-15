@@ -32,8 +32,6 @@ public:
 	// Set the terrain
 	void SetTerrain(GroundEntity* m_pTerrain);
 
-	// Get position
-	Vector3 GetPos(void) const;
 	// Get target
 	Vector3 GetTarget(void) const;
 	// Get Up

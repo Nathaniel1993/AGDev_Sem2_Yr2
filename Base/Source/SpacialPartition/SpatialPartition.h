@@ -31,6 +31,7 @@ protected:
 	int prevGrid;
 	bool gridChanged;
 	Mesh* selectedGridMesh;
+	std::vector<EntityBase*> selectedList;
 
 public:
 	static CSpatialPartition *GetInstance()

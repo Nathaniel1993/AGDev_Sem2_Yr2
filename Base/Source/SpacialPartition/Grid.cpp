@@ -228,6 +228,16 @@ void CGrid::DeleteDone()
 	}
 }
 
+Vector3 CGrid::GetMin()
+{
+	return min;
+}
+
+Vector3 CGrid::GetMax()
+{
+	return max;
+}
+
 // Check for overlap
 bool CGrid::CheckOverlap(Vector3 thisMinAABB, Vector3 thisMaxAABB, Vector3 thatMinAABB, Vector3 thatMaxAABB)
 {
@@ -408,7 +418,8 @@ bool CGrid::CheckForCollision(void)
 						else
 						{
 							(*colliderThis)->SetIsDone(true);
-							CSceneGraph::GetInstance()->theRoot->FindEntityForSelect(CSceneGraph::GetInstance()->GetNode(*colliderThat));
+							CSceneGraph::GetInstance()->GetNode((*colliderThat));
+							CSceneGraph::GetInstance()->theRoot->FindEntityForSelect(CSceneGraph::GetInstance()->GetNode((*colliderThat)));
 						}
 					}
 				}
@@ -427,6 +438,9 @@ bool CGrid::CheckForCollision(void)
 			for (colliderThat = colliderThis; colliderThat != colliderThatEnd; ++colliderThat)
 			{
 				if (colliderThat == colliderThis)
+					continue;
+
+				if ((*colliderThat)->GetIsLaser())
 					continue;
 
 				if ((*colliderThat)->HasCollider())

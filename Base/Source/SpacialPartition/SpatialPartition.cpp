@@ -456,14 +456,123 @@ void CSpatialPartition::GridSelection()
 
 	if (gridChanged)
 	{
-		for (int i = 0; i < theGrid[prevGrid].GetListOfObject().size(); i++)
+		if (selectedList.size() > 0)
 		{
-			theGrid[prevGrid].GetListOfObject()[i]->SetSelectedGrid(false);
+			for (int i = 0; i < theGrid[prevGrid].GetListOfObject().size(); i++)
+			{
+				theGrid[prevGrid].GetListOfObject()[i]->SetSelectedGrid(false);
+			}
 		}
 		
-		for (int i = 0; i < theGrid[selectedGrid].GetListOfObject().size(); i++)
+		// Check all grids surrounding the current grid
+		// X X X
+		// X C X
+		// X X X
+		// 'X' is the extra grid to check, 'C' is the grid being checked, 
+
+		int gridNumToCheck;
+		int xSelected = selectedGrid / xNumOfGrid;
+		int zSelected = selectedGrid % zNumOfGrid;
+		if (xSelected < xNumOfGrid - 1)
+		{ // X Grid less than max
+			// X X X
+			// O C O
+			// O O O
+			if (zSelected > 0)
+			{ // Top Left
+				gridNumToCheck = (xSelected + 1) * zNumOfGrid + (zSelected - 1);
+				for (int k = 0; k < theGrid[gridNumToCheck].GetListOfObject().size(); ++k)
+				{
+					selectedList.push_back(theGrid[gridNumToCheck].GetListOfObject()[k]);
+				}
+			}
+
+			if (zSelected < zNumOfGrid - 1)
+			{ // Top Right
+				gridNumToCheck = (xSelected + 1) * zNumOfGrid + (zSelected + 1);
+				for (int k = 0; k < theGrid[gridNumToCheck].GetListOfObject().size(); ++k)
+				{
+					selectedList.push_back(theGrid[gridNumToCheck].GetListOfObject()[k]);
+				}
+			}
+
+			// Top Mid
+			gridNumToCheck = (xSelected + 1) * zNumOfGrid + (zSelected);
+			for (int k = 0; k < theGrid[gridNumToCheck].GetListOfObject().size(); ++k)
+			{
+				selectedList.push_back(theGrid[gridNumToCheck].GetListOfObject()[k]);
+			}
+		}
+
+		if (zSelected > 0)
+		{ // Z Grid more than 0
+			// O O O
+			// X C O
+			// X O O
+			if (xSelected > 0)
+			{ // Bottom Left
+				gridNumToCheck = (xSelected - 1) * zNumOfGrid + (zSelected - 1);
+				for (int k = 0; k < theGrid[gridNumToCheck].GetListOfObject().size(); ++k)
+				{
+					selectedList.push_back(theGrid[gridNumToCheck].GetListOfObject()[k]);
+				}
+			}
+
+			// Middle Left
+			gridNumToCheck = (xSelected)* zNumOfGrid + (zSelected - 1);
+			for (int k = 0; k < theGrid[gridNumToCheck].GetListOfObject().size(); ++k)
+			{
+				selectedList.push_back(theGrid[gridNumToCheck].GetListOfObject()[k]);
+			}
+		}
+
+		if (zSelected < zNumOfGrid - 1)
+		{ // Z Grid less than man num of grid
+			// O O O
+			// O C X
+			// O O X
+			if (xSelected > 0)
+			{ // Bottom Right
+				gridNumToCheck = (xSelected - 1) * zNumOfGrid + (zSelected + 1);
+				for (int k = 0; k < theGrid[gridNumToCheck].GetListOfObject().size(); ++k)
+				{
+					selectedList.push_back(theGrid[gridNumToCheck].GetListOfObject()[k]);
+				}
+			}
+
+			// Middle Right
+			gridNumToCheck = (xSelected) * zNumOfGrid + (zSelected + 1);
+			for (int k = 0; k < theGrid[gridNumToCheck].GetListOfObject().size(); ++k)
+			{
+				selectedList.push_back(theGrid[gridNumToCheck].GetListOfObject()[k]);
+			}
+		}
+
+		if (xSelected > 0)
+		{ // XGrid mode than 0
+		  // O O O
+		  // O C O
+		  // O X O
+		  // Bottom Middle
+			gridNumToCheck = (xSelected - 1) * zNumOfGrid + (zSelected);
+			for (int k = 0; k < theGrid[gridNumToCheck].GetListOfObject().size(); ++k)
+			{
+				selectedList.push_back(theGrid[gridNumToCheck].GetListOfObject()[k]);
+			}
+		}
+
+		for (int k = 0; k < theGrid[selectedGrid].GetListOfObject().size(); ++k)
 		{
-			theGrid[selectedGrid].GetListOfObject()[i]->SetSelectedGrid(true);
+			selectedList.push_back(theGrid[selectedGrid].GetListOfObject()[k]);
+		}
+
+		for (int i = 0; i < selectedList.size(); i++)
+		{
+			if(selectedList[i]->GetPosition().x <= theGrid[selectedGrid].GetMax().x 
+				&& selectedList[i]->GetPosition().x >= theGrid[selectedGrid].GetMin().x
+				&& selectedList[i]->GetPosition().z <= theGrid[selectedGrid].GetMax().z
+				&& selectedList[i]->GetPosition().z >= theGrid[selectedGrid].GetMin().z)
+				selectedList[i]->SetSelectedGrid(true);
 		}
 	}
 }

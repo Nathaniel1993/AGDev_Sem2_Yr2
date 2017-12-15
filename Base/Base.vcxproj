@@ -13,6 +13,8 @@
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp" />
     <ClCompile Include="Source\Enemy\Enemy.cpp" />
+    <ClCompile Include="Source\Enemy\Tank\Tank.cpp" />
+    <ClCompile Include="Source\Enemy\Tank\TankPart.cpp" />
     <ClCompile Include="Source\EntityManager.cpp" />
     <ClCompile Include="Source\FPSCamera.cpp" />
     <ClCompile Include="Source\GenericEntity.cpp" />
@@ -45,6 +47,8 @@
   <ItemGroup>
     <ClInclude Include="Source\Application.h" />
     <ClInclude Include="Source\Enemy\Enemy.h" />
+    <ClInclude Include="Source\Enemy\Tank\Tank.h" />
+    <ClInclude Include="Source\Enemy\Tank\TankPart.h" />
     <ClInclude Include="Source\EntityManager.h" />
     <ClInclude Include="Source\FPSCamera.h" />
     <ClInclude Include="Source\GenericEntity.h" />

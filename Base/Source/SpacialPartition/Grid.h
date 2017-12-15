@@ -103,4 +103,7 @@ public:
 
 	// Delete entities that are done
 	void DeleteDone();
+
+	Vector3 GetMin();
+	Vector3 GetMax();
 };

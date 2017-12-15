@@ -260,8 +260,21 @@ CSceneNode* CSceneNode::DetachChild(const int ID)
 CSceneNode* CSceneNode::GetEntity(EntityBase* theEntity)
 {
 	// If it is inside this node, then return this node
-	if (this->theEntity == theEntity)
-		return this;
+	vector <CSceneNode*>::iterator it = theChildren.begin();
+	for (it; it != theChildren.end(); ++it)
+	{
+		if ((*it)->theEntity == theEntity)
+			return (*it);
+		if ((*it)->theChildren.size() > 0)
+		{
+			CSceneNode* theNode = (*it)->GetEntity(theEntity);
+			if (theNode)
+			{
+				if (theNode->theEntity == theEntity)
+					return theNode;
+			}
+		}
+	}
 
 	return NULL;
 }
@@ -354,7 +367,7 @@ void CSceneNode::Render(void)
 
 
 		// Render the entity
-		theEntity->Render();
+		//theEntity->Render();
 	}
 
 	// Render the children
@@ -423,8 +436,9 @@ bool CSceneNode::FindEntityForSelect(CSceneNode* theNode)
 			std::vector<CSceneNode*>::iterator it = theChildren.begin();
 			while (it != theChildren.end())
 			{
-				if ((*it)->FindEntityForSelect(*it))
+				if ((*it)->FindEntityForSelect(theNode))
 					break;
+				++it;
 			}
 		}
 	}
@@ -433,13 +447,14 @@ bool CSceneNode::FindEntityForSelect(CSceneNode* theNode)
 
 void CSceneNode::SetParentSelected(CSceneNode * theNode)
 {
-	if (theNode->theParent == CSceneGraph::GetInstance()->theRoot)
+	if (theNode->theParent->GetID() == 0)
 	{
 		SetChildrenSelected(theNode);
 		theNode->GetEntity()->SetSelectedGun(!theNode->GetEntity()->GetSelectedGun());
 		return;
 	}
-	SetParentSelected(theNode->theParent);
+	else
+		SetParentSelected(theNode->theParent);
 }
 
 void CSceneNode::SetChildrenSelected(CSceneNode * theNode)

@@ -21,6 +21,7 @@
 #include "Light.h"
 #include "SkyBox/SkyBoxEntity.h"
 #include "SceneGraph\SceneGraph.h"
+#include "Enemy\Tank\Tank.h"
 
 #include <iostream>
 using namespace std;
@@ -200,169 +201,31 @@ void SceneText::Init()
 	Create::Asset("reference", Vector3(0.0f, 0.0f, 0.0f)); // Reference
 	Create::Asset("lightball", Vector3(lights[0]->position.x, lights[0]->position.y, lights[0]->position.z)); // Lightball
 
-	// ==================== Target cube ======================
-	// Parent
-	//GenericEntity* aCube = Create::Entity("cube", Vector3(-20.0f, 0.0f, -20.0f));
-	////CUpdateTransformation* aCubeBaseMtx = new CUpdateTransformation();
-	////CSceneNode* aCubeBaseNode = CSceneGraph::GetInstance()->AddNode(aCube);
-	//aCube->SetScale(Vector3(5.f, 5.f, 7.0f));
-	//aCube->SetCollider(true);
-	//aCube->SetAABB(Vector3(2.5f, 2.5f, 3.5f), Vector3(-2.5f, -2.5f, -3.5f)); // half of the original scale
-	////aCube->InitLOD("cube", "sphere", "cubeSG");
-	////aCubeBaseMtx->ApplyUpdate(0.0f, 0.0f, 1.0f);
-	////aCubeBaseMtx->SetSteps(-60, 60);
-	////aCubeBaseNode->SetUpdateTransformation(aCubeBaseMtx);
-	//
-	//// Add the pointer to this new entity to the Scene Graph
-	//CSceneNode* theNode = CSceneGraph::GetInstance()->AddNode(aCube);
-	//if (theNode == NULL)
-	//{
-	//	cout << "EntityManager::AddEntity: Unable to add to scene graph!" << endl;
-	//}
-	//
-	//// Child
-	//GenericEntity* rightThread = Create::Entity("cubeSG", Vector3(-15.0f, -2.0f, -20.0f));
-	//rightThread->SetScale(Vector3(2.5f, 3.0f, 5.0f));
-	//rightThread->SetCollider(true);
-	//rightThread->SetAABB(Vector3(rightThread->GetScale().x / 2, rightThread->GetScale().y / 2, rightThread->GetScale().z / 2 ), 
-	//	Vector3(-rightThread->GetScale().x / 2, -rightThread->GetScale().y / 2, -rightThread->GetScale().z / 2));
-	//CSceneNode* rightThreadNode = theNode->AddChild(rightThread);
-	//if (rightThreadNode == NULL)
-	//{
-	//	cout << "EntityManager::AddEntity: Unable to add to scene graph!" << endl;
-	//}
-	//GenericEntity* leftThread = Create::Entity("cubeSG", Vector3(-25.0f, -2.0f, -20.0f));
-	//leftThread->SetScale(Vector3(2.5f, 3.0f, 5.0f));
-	//leftThread->SetCollider(true);
-	//leftThread->SetAABB(Vector3(leftThread->GetScale().x / 2, leftThread->GetScale().y / 2, leftThread->GetScale().z / 2),
-	//	Vector3(-leftThread->GetScale().x / 2, -leftThread->GetScale().y / 2, -leftThread->GetScale().z / 2));
-	//CSceneNode* leftThreadNode = theNode->AddChild(leftThread);
-	//if (leftThreadNode == NULL)
-	//{
-	//	cout << "EntityManager::AddEntity: Unable to add to scene graph!" << endl;
-	//}
-
-	//GenericEntity* turret = Create::Entity("cubeSG", Vector3(-20.0f, 5.0f, -20.0f));
-	//turret->SetScale(Vector3(4.0f, 4.0f, 4.0f));
-	//turret->SetCollider(true);
-	//turret->SetAABB(Vector3(turret->GetScale().x / 2, turret->GetScale().y / 2, turret->GetScale().z / 2),
-	//	Vector3(-turret->GetScale().x / 2, -turret->GetScale().y / 2, -turret->GetScale().z / 2));
-	//CSceneNode* turretNode = theNode->AddChild(turret);
-	//if (turretNode == NULL)
-	//{
-	//	cout << "EntityManager::AddEntity: Unable to add to scene graph!" << endl;
-	//}
-
-	//GenericEntity* barrel = Create::Entity("cubeBarrel", Vector3(-20.0f, 5.0f, -15.0f));
-	//barrel->SetScale(Vector3(1.0f, 1.0f, 4.0f));
-	//barrel->SetCollider(true);
-	//barrel->SetAABB(Vector3(barrel->GetScale().x / 2, barrel->GetScale().y / 2, barrel->GetScale().z / 2),
-	//	Vector3(-barrel->GetScale().x / 2, -barrel->GetScale().y / 2, -barrel->GetScale().z / 2));
-	//CSceneNode* barrelNode = turretNode->AddChild(barrel);
-	//if (barrelNode == NULL)
-	//{
-	//	cout << "EntityManager::AddEntity: Unable to add to scene graph!" << endl;
-	//}
-	// ==================================================================================
-
-	// Moving cube thing
-	/*GenericEntity* baseCube = Create::Asset("cube", Vector3(0.0f, 0.0f, 0.0f));
-	CSceneNode* baseNode = CSceneGraph::GetInstance()->AddNode(baseCube);
-
-	CUpdateTransformation* baseMtx = new CUpdateTransformation();
-	baseMtx->ApplyUpdate(1.0f, 0.0f, 0.0f, 1.0f);
-	baseMtx->SetSteps(-60, 60);
-	baseNode->SetUpdateTransformation(baseMtx);
-
-	GenericEntity* childCube = Create::Asset("cubeSG", Vector3(0.0f, 0.0f, 0.0f));
-	CSceneNode* childNode = baseNode->AddChild(childCube);
-	childNode->ApplyTranslate(0.0f, 1.0f, 0.0f);
-
-	GenericEntity* grandchildCube = Create::Asset("cubeSG", Vector3(0.0f, 0.0f, 0.0f));
-	CSceneNode* grandchildNode = childNode->AddChild(grandchildCube);
-	grandchildNode->ApplyTranslate(0.0f, 0.0f, 1.0f);
-	CUpdateTransformation* aRotateMtx = new CUpdateTransformation();
-	aRotateMtx->ApplyUpdate(1.0f, 0.0f, 0.0f, 1.0f);
-	aRotateMtx->SetSteps(-120, 60);
-	grandchildNode->SetUpdateTransformation(aRotateMtx);*/
-	// =======================================================
-
 	// Create a CEnemy instance
-	CEnemy* theEnemyList = new CEnemy();
-	theEnemy.push_back(theEnemyList);
+	CTank* theTank = new CTank();
+	theTank->SetPosition(Vector3(5.f, 1.f, 10.f));
+	theTank->Init();
 
-	theEnemy[0] = new CEnemy();
-	theEnemy[0]->Init();
-	theEnemy[0]->SetScale(Vector3(5.f, 5.f, 7.f));
-	theEnemy[0]->SetAABB(Vector3(theEnemy[0]->GetScale().x / 2, theEnemy[0]->GetScale().y / 2, theEnemy[0]->GetScale().z / 2), 
-		Vector3(-(theEnemy[0]->GetScale().x / 2) ,-(theEnemy[0]->GetScale().y / 2), -(theEnemy[0]->GetScale().z / 2)));
-	CSceneNode* theEnemyNode = CSceneGraph::GetInstance()->AddNode(theEnemy[0]);
-	theEnemy[0]->InitLOD("obj_cube", "sphere", "cube");
-	theEnemy[0]->SetCollider(true);
-	/*CUpdateTransformation *enemyBaseMtx = new CUpdateTransformation();
-	enemyBaseMtx->ApplyUpdate(0, 20, 0);
-	enemyBaseMtx->SetSteps(-60, 60);
-	theEnemyNode->SetUpdateTransformation(enemyBaseMtx);*/
+	CTank* theTank1 = new CTank();
+	theTank1->SetPosition(Vector3(-5.f, 1.f, -10.f));
+	theTank1->Init();
 
-	if (theEnemyNode == NULL)
-	{
-		cout << "EntityManager::AddEntity: Unable to add to scene graph!" << endl;
-	}
-	theEnemy.push_back(theEnemyList);
-	theEnemy[1] = new CEnemy();
-	theEnemy[1]->Init();
-	theEnemy[1]->InitLOD("obj_cube", "sphere", "cube");
-	theEnemy[1]->SetScale(Vector3(2.5f, 2.5f, 5.f));
-	theEnemy[1]->SetPosition(Vector3(theEnemy[0]->GetPos().x - 5, theEnemy[0]->GetPos().y - 2, theEnemy[0]->GetPos().z + 1));
-	theEnemy[1]->SetAABB(Vector3( theEnemy[1]->GetPosition().x + (theEnemy[1]->GetScale().x / 2), 
-								  theEnemy[1]->GetPosition().y + (theEnemy[1]->GetScale().y / 2), 
-								  theEnemy[1]->GetPosition().z + (theEnemy[1]->GetScale().z / 2)),
-						 Vector3((theEnemy[1]->GetPosition().x - (theEnemy[1]->GetScale().x / 2)), 
-								 (theEnemy[1]->GetPosition().y - (theEnemy[1]->GetScale().y / 2)), 
-								 (theEnemy[1]->GetPosition().z - (theEnemy[1]->GetScale().z / 2))));
-	theEnemy[1]->SetCollider(true);
-	CSceneNode* theEnemyChildNode = theEnemyNode->AddChild(theEnemy[1]);
-	if (theEnemyChildNode == NULL)
-	{
-		cout << "EntityManager::AddEntity: Unable to add to scene graph!" << endl;
-	}
-	theEnemy.push_back(theEnemyList);
-	theEnemy[2] = new CEnemy();
-	theEnemy[2]->Init();
-	theEnemy[2]->InitLOD("obj_cube", "sphere", "cube");
-	theEnemy[2]->SetScale(Vector3(2.5f, 2.5f, 5.f));
-	theEnemy[2]->SetPosition(Vector3(theEnemy[0]->GetPos().x + 5, theEnemy[0]->GetPos().y - 2, theEnemy[0]->GetPos().z + 1));
-	theEnemy[2]->SetAABB(Vector3(theEnemy[2]->GetPosition().x + (theEnemy[2]->GetScale().x / 2),
-								theEnemy[2]->GetPosition().y + (theEnemy[2]->GetScale().y / 2),
-								theEnemy[2]->GetPosition().z + (theEnemy[2]->GetScale().z / 2)),
-						Vector3((theEnemy[2]->GetPosition().x - (theEnemy[2]->GetScale().x / 2)),
-								(theEnemy[2]->GetPosition().y - (theEnemy[2]->GetScale().y / 2)),
-								(theEnemy[2]->GetPosition().z - (theEnemy[2]->GetScale().z / 2))));
-	theEnemy[2]->SetCollider(true);
-	CSceneNode* theEnemyChildNode2 = theEnemyNode->AddChild(theEnemy[2]);
-	if (theEnemyChildNode2 == NULL)
-	{
-		cout << "EntityManager::AddEntity: Unable to add to scene graph!" << endl;
-	}
-	theEnemy.push_back(theEnemyList);
-	theEnemy[3] = new CEnemy();
-	theEnemy[3]->Init();
-	theEnemy[3]->InitLOD("obj_cube", "sphere", "cube");
-	theEnemy[3]->SetScale(Vector3(4.f, 4.f, 4.f));
-	theEnemy[3]->SetPosition(Vector3(theEnemy[0]->GetPos().x, theEnemy[0]->GetPos().y + 5, theEnemy[0]->GetPos().z + 1.5));
-	theEnemy[3]->SetAABB(Vector3(theEnemy[3]->GetPosition().x + (theEnemy[3]->GetScale().x / 2),
-								theEnemy[3]->GetPosition().y + (theEnemy[3]->GetScale().y / 2),
-								theEnemy[3]->GetPosition().z + (theEnemy[3]->GetScale().z / 2)),
-						Vector3((theEnemy[3]->GetPosition().x - (theEnemy[3]->GetScale().x / 2)),
-								(theEnemy[3]->GetPosition().y - (theEnemy[3]->GetScale().y / 2)),
-								(theEnemy[3]->GetPosition().z - (theEnemy[3]->GetScale().z / 2))));
-	theEnemy[3]->SetCollider(true);
-	CSceneNode* theEnemyChildNode3 = theEnemyNode->AddChild(theEnemy[3]);
-	if (theEnemyChildNode2 == NULL)
-	{
-		cout << "EntityManager::AddEntity: Unable to add to scene graph!" << endl;
-	}
-
+	CTank* theTank2 = new CTank();
+	theTank2->SetPosition(Vector3(15.f, 1.f, -10.f));
+	theTank2->Init();
+	//// ======================= NEED TO FIX THIS ==========================
+	//theEnemy.push_back(theEnemyList);
+	//theEnemy[4] = new CEnemy();
+	//theEnemy[4]->Init();
+	//theEnemy[4]->InitLOD("cube", "sphere", "cube");
+	//theEnemy[4]->SetScale(Vector3(4.f, 4.f, 4.f));
+	//CSceneNode* theEnemyChildNode4 = theEnemyChildNode3->AddChild(theEnemy[4]);
+	//theEnemyChildNode4->ApplyTranslate(theEnemy[3]->GetPos().x, theEnemy[3]->GetPos().y, theEnemy[3]->GetPos().z);
+	//CUpdateTransformation* bRotateMtx = new CUpdateTransformation();
+	//bRotateMtx->ApplyUpdate(1.0f, 0.0f, 1.0f, 0.0f);
+	//bRotateMtx->SetSteps(-60, 60);
+	//theEnemyChildNode4->SetUpdateTransformation(bRotateMtx);
+	// ===================================================================
 
 	groundEntity = Create::Ground("GRASS_DARKGREEN", "GEO_GRASS_LIGHTGREEN");
 	//	Create::Text3DObject("text", Vector3(0.0f, 0.0f, 0.0f), "DM2210", Vector3(10.0f, 10.0f, 10.0f), Color(0, 1, 1));
@@ -377,7 +240,6 @@ void SceneText::Init()
 	groundEntity->SetScale(Vector3(100.0f, 100.0f, 100.0f));
 	groundEntity->SetGrids(Vector3(10.0f, 1.0f, 10.0f));
 	playerInfo->SetTerrain(groundEntity);
-	theEnemy[0]->SetTerrain(groundEntity);
 	
 	// Setup the 2D entities
 	float halfWindowWidth = Application::GetInstance().GetWindowWidth() / 2.0f;
@@ -442,18 +304,6 @@ void SceneText::Update(double dt)
 	}
 	// <THERE>
 
-	theEnemy[1]->SetPosition(Vector3(theEnemy[0]->GetPos().x - 5, theEnemy[0]->GetPos().y - 2, theEnemy[0]->GetPos().z + 1));
-	theEnemy[2]->SetPosition(Vector3(theEnemy[0]->GetPos().x + 5, theEnemy[0]->GetPos().y - 2, theEnemy[0]->GetPos().z + 1));
-	theEnemy[3]->SetPosition(Vector3(theEnemy[0]->GetPos().x, theEnemy[0]->GetPos().y + 5, theEnemy[0]->GetPos().z + 1.5));
-
-	/*theEnemy[1]->SetAABB(Vector3(theEnemy[1]->GetPos().x + (theEnemy[1]->GetScale().x / 2),
-								theEnemy[1]->GetPos().y + (theEnemy[1]->GetScale().y / 2),
-								theEnemy[1]->GetPos().z + (theEnemy[1]->GetScale().z / 2)),
-						Vector3((theEnemy[1]->GetPos().x - (theEnemy[1]->GetScale().x / 2)),
-								(theEnemy[1]->GetPos().y - (theEnemy[1]->GetScale().y / 2)),
-								(theEnemy[1]->GetPos().z - (theEnemy[1]->GetScale().z / 2))));*/
-
-
 	// Update the player position and other details based on keyboard and mouse inputs
 	playerInfo->Update(dt);
 
@@ -485,6 +335,8 @@ void SceneText::Render()
 	GraphicsManager::GetInstance()->SetPerspectiveProjection(45.0f, 4.0f / 3.0f, 0.1f, 10000.0f);
 	GraphicsManager::GetInstance()->AttachCamera(&camera);
 	EntityManager::GetInstance()->Render();
+	// Render the Scene Graph
+	CSceneGraph::GetInstance()->Render();
 	CSpatialPartition::GetInstance()->Render();
 
 	// Setup 2D pipeline then render 2D

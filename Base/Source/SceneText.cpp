@@ -144,7 +144,7 @@ void SceneText::Init()
 		MeshBuilder::GetInstance()->GenerateSphere("sphere", Color(1, 0, 0), 18, 36, 0.5f);
 		MeshBuilder::GetInstance()->GenerateCone("cone", Color(0.5f, 1, 0.3f), 36, 10.f, 10.f);
 		
-		MeshBuilder::GetInstance()->GenerateCube("cube", Color(1.0f, 1.0f, 0.0f), 1.0f);
+		MeshBuilder::GetInstance()->GenerateCube("cube", Color(1.0f, 1.0f, 1.0f), 1.0f);
 
 		MeshBuilder::GetInstance()->GenerateOBJ("obj_cube", "OBJ//Cube.obj");
 		MeshBuilder::GetInstance()->GetMesh("obj_cube")->textureArray[0] = LoadTGA("Image//Grid.tga");

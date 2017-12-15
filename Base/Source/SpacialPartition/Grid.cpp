@@ -228,6 +228,16 @@ void CGrid::DeleteDone()
 	}
 }
 
+Vector3 CGrid::GetMin()
+{
+	return min;
+}
+
+Vector3 CGrid::GetMax()
+{
+	return max;
+}
+
 // Check for overlap
 bool CGrid::CheckOverlap(Vector3 thisMinAABB, Vector3 thisMaxAABB, Vector3 thatMinAABB, Vector3 thatMaxAABB)
 {
@@ -389,18 +399,27 @@ bool CGrid::CheckForCollision(void)
 						thatMinAABB, thatMaxAABB,
 						hitPosition) == true)
 					{
-						(*colliderThis)->SetIsDone(true);
-						(*colliderThat)->SetIsDone(true);
+						if (!thisEntity->GetIsSelector())
+						{
+							(*colliderThis)->SetIsDone(true);
+							(*colliderThat)->SetIsDone(true);
 
-						// Remove from Scene Graph
-						if (CSceneGraph::GetInstance()->DeleteNode((*colliderThis)) == true)
-						{
-							cout << "*** This Entity removed ***" << endl;
+							// Remove from Scene Graph
+							if (CSceneGraph::GetInstance()->DeleteNode((*colliderThis)) == true)
+							{
+								cout << "*** This Entity removed ***" << endl;
+							}
+							//Remove from Scene Graph
+							if (CSceneGraph::GetInstance()->DeleteNode((*colliderThat)) == true)
+							{
+								cout << "*** That Entity removed ***" << endl;
+							}
 						}
-						//Remove from Scene Graph
-						if (CSceneGraph::GetInstance()->DeleteNode((*colliderThat)) == true)
+						else
 						{
-							cout << "*** That Entity removed ***" << endl;
+							(*colliderThis)->SetIsDone(true);
+							CSceneGraph::GetInstance()->GetNode((*colliderThat));
+							CSceneGraph::GetInstance()->theRoot->FindEntityForSelect(CSceneGraph::GetInstance()->GetNode((*colliderThat)));
 						}
 					}
 				}
@@ -419,6 +438,9 @@ bool CGrid::CheckForCollision(void)
 			for (colliderThat = colliderThis; colliderThat != colliderThatEnd; ++colliderThat)
 			{
 				if (colliderThat == colliderThis)
+					continue;
+
+				if ((*colliderThat)->GetIsLaser())
 					continue;
 
 				if ((*colliderThat)->HasCollider())

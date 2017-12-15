@@ -525,15 +525,16 @@ Mesh* MeshBuilder::GenerateText(const std::string &meshName, unsigned numRow, un
 	return mesh;
 }
 
-Mesh* MeshBuilder::GenerateRay(const std::string &meshName, const float length)
+Mesh* MeshBuilder::GenerateRay(const std::string &meshName, Color color, const float length)
 {
 	Vertex v;
 	std::vector<Vertex> vertex_buffer_data;
 	v.pos.Set(0.f, length, 0.f);
-	v.color.Set(1.f, 0.f, 0.f);
+	v.color = color;
 	vertex_buffer_data.push_back(v);
+	
 	v.pos.Set(0.f, 0.f, 0.f);
-	v.color.Set(1.f, 0.f, 0.f);
+	v.color = color;
 	vertex_buffer_data.push_back(v);
 
 	std::vector<GLuint> index_buffer_data;

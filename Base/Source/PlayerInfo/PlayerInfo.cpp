@@ -8,6 +8,7 @@
 #include "../WeaponInfo/Pistol.h"
 #include "../WeaponInfo/LaserBlaster.h"
 #include "../WeaponInfo/GrenadeThrow.h"
+#include "../WeaponInfo/Selector.h"
 
 // Allocating and initializing CPlayerInfo's static data member.  
 // The pointer is allocated but not the object's constructor.
@@ -70,7 +71,7 @@ void CPlayerInfo::Init(void)
 	// Set the laser blaster as the secondary weapon
 	/*secondaryWeapon = new CLaserBlaster();
 	secondaryWeapon->Init();*/
-	secondaryWeapon = new CGrenadeThrow();
+	secondaryWeapon = new CSelector();
 	secondaryWeapon->Init();
 }
 

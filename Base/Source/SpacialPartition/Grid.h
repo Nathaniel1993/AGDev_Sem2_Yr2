@@ -27,7 +27,6 @@ protected:
 
 	// The mesh to represent the grid
 	Mesh* theMesh;
-	Mesh* selectedMesh;
 
 	// List of objects in this grid
 	vector<EntityBase*> ListOfObjects;
@@ -104,4 +103,7 @@ public:
 
 	// Delete entities that are done
 	void DeleteDone();
+
+	Vector3 GetMin();
+	Vector3 GetMax();
 };

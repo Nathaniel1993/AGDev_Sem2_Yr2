@@ -27,10 +27,10 @@ void GenericEntity::Render()
 	if (GetLODStatus() == true)
 	{
 		if (theDetailLevel != NO_DETAILS)
-			RenderHelper::RenderMesh(GetLODMesh());
+			RenderHelper::RenderMesh(GetLODMesh(), selected_Grid, selected_Gun);
 	}
 	else
-		RenderHelper::RenderMesh(modelMesh);
+		RenderHelper::RenderMesh(modelMesh, selected_Grid, selected_Gun);
 
 	modelStack.PopMatrix();
 }
@@ -57,7 +57,7 @@ GenericEntity* Create::Entity(	const std::string& _meshName,
 
 	GenericEntity* result = new GenericEntity(modelMesh);
 	result->SetPosition(_position);
-	result->SetScale(_scale);
+	result->SetScaleEntity(_scale);
 	result->SetCollider(false);
 	CSpatialPartition::GetInstance()->Add(result);
 	return result;
@@ -74,7 +74,7 @@ GenericEntity* Create::Asset(const std::string& _meshName,
 
 	GenericEntity* result = new GenericEntity(modelMesh);
 	result->SetPosition(_position);
-	result->SetScale(_scale);
+	result->SetScaleEntity(_scale);
 	result->SetCollider(false);
 	EntityManager::GetInstance()->AddEntity(result);
 	return result;

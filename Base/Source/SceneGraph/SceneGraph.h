@@ -48,6 +48,8 @@ public:
 	// PrintSelf for debug purposes
 	void PrintSelf(void);
 
+	void Selected(EntityBase* theEntity);
+
 	// The root of the scene graph. 
 	// It usually does not have a mesh, and is the starting point for all scene graph operations
 	CSceneNode* theRoot;

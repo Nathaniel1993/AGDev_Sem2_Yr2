@@ -22,34 +22,8 @@ CEnemy::~CEnemy()
 
 void CEnemy::Init(void)
 {
-	// Set the default values
-	defaultPosition.Set(0, 0, 10);
-	defaultTarget.Set(0, 0, 0);
-	defaultUp.Set(0, 1, 0);
-
-	// Set the current values
-	//position.Set(10.0f, 0.0f, 0.0f);
-	target.Set(10.0f, 0.0f, 450.0f);
-	up.Set(0.0f, 1.0f, 0.0f);
-
-	// Set Boundry
-	maxBoundry.Set(1, 1, 1);
-	minBoundry.Set(-1, -1, -1);
-
-	// Set Speed
-	m_dSpeed = 0.0;
-
-	// Initialise the LOD meshes
-	InitLOD("cube", "sphere", "cubeSG");
-
-	// Initialise the collider
-	this->SetCollider(false);
-	//this->SetAABB(Vector3(1, 1, 1), Vector3(-1, -1, -1));
-
-	// Add to the EntityManager
-	CSpatialPartition::GetInstance()->Add(this);
-
 }
+
 // Reset this player instance to default
 void CEnemy::Reset(void)
 {
@@ -86,11 +60,6 @@ void CEnemy::SetTerrain(GroundEntity * m_pTerrain)
 	}
 }
 
-Vector3 CEnemy::GetPos(void) const
-{
-	return position;
-}
-
 Vector3 CEnemy::GetTarget(void) const
 {
 	return target;
@@ -108,8 +77,8 @@ GroundEntity * CEnemy::GetTerrain(void)
 
 void CEnemy::Update(double dt)
 {
-	Vector3 veiwVector = (target - position).Normalized();
-	position += veiwVector * (float)m_dSpeed * (float)dt;
+	Vector3 viewVector = (target - position).Normalized();
+	position += viewVector * (float)m_dSpeed * (float)dt;
 
 	// Constrain the position
 	Constrain();
@@ -136,8 +105,8 @@ void CEnemy::Constrain(void)
 
 	// if the y position is not equal to terrain height at that position
 	// then update y position to the terrain height
-	if (position.y != m_pTerrain->GetTerrainHeight(position))
-		position.y = m_pTerrain->GetTerrainHeight(position);
+	/*if (position.y != m_pTerrain->GetTerrainHeight(position))
+		position.y = m_pTerrain->GetTerrainHeight(position);*/
 
 }
 
@@ -151,7 +120,7 @@ void CEnemy::Render(void)
 	{
 		if (theDetailLevel != NO_DETAILS)
 		{
-			RenderHelper::RenderMesh(GetLODMesh());
+			RenderHelper::RenderMesh(GetLODMesh(), selected_Grid, selected_Gun);
 		}
 	}
 	modelStack.PopMatrix();

@@ -8,7 +8,7 @@ class Mesh;
 class RenderHelper
 {
 public:
-	static void RenderMesh(Mesh* _mesh);
+	static void RenderMesh(Mesh* _mesh, bool _selectedGrid = false, bool _selectedGun = false);
 	static void RenderMeshWithLight(Mesh* _mesh);
 	static void RenderText(Mesh* _mesh, const std::string& _text, Color _color);
 };

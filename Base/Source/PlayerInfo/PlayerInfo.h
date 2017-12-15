@@ -97,6 +97,14 @@ public:
 	// Get the terrain for the player info
 	GroundEntity* GetTerrain(void);
 
+	int GetBulletCount(void) const;
+
+	int GetMagCount(void) const;
+
+	int GetClipCount(void) const;
+
+	int GetWeaponType(void) const;
+
 private:
 	Vector3 defaultPosition, defaultTarget, defaultUp;
 	Vector3 position, target, up;
@@ -118,4 +126,6 @@ private:
 
 	CWeaponInfo* primaryWeapon;
 	CWeaponInfo* secondaryWeapon;
+	CWeaponInfo **weapon;
+	int currWeapon;
 };

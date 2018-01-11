@@ -456,20 +456,23 @@ void CSpatialPartition::GridSelection()
 
 	if (gridChanged)
 	{
+		// Clear all selected items from previous selection
 		if (selectedList.size() > 0)
 		{
-			for (int i = 0; i < theGrid[prevGrid].GetListOfObject().size(); i++)
+			std::vector<EntityBase*>::iterator it = selectedList.begin();
+			while (it != selectedList.end())
 			{
-				theGrid[prevGrid].GetListOfObject()[i]->SetSelectedGrid(false);
+				(*it)->SetSelectedGrid(false);
+				++it;
 			}
+			selectedList.clear();
 		}
-		
+
 		// Check all grids surrounding the current grid
 		// X X X
 		// X C X
 		// X X X
-		// 'X' is the extra grid to check, 'C' is the grid being checked, 
-
+		// 'X' is the extra grid to check, 'C' is the grid being checked
 		int gridNumToCheck;
 		int xSelected = selectedGrid / xNumOfGrid;
 		int zSelected = selectedGrid % zNumOfGrid;
@@ -527,7 +530,7 @@ void CSpatialPartition::GridSelection()
 		}
 
 		if (zSelected < zNumOfGrid - 1)
-		{ // Z Grid less than man num of grid
+		{ // Z Grid less than min num of grid
 			// O O O
 			// O C X
 			// O O X
@@ -572,7 +575,7 @@ void CSpatialPartition::GridSelection()
 				&& selectedList[i]->GetPosition().x >= theGrid[selectedGrid].GetMin().x
 				&& selectedList[i]->GetPosition().z <= theGrid[selectedGrid].GetMax().z
 				&& selectedList[i]->GetPosition().z >= theGrid[selectedGrid].GetMin().z)
-				selectedList[i]->SetSelectedGrid(true);
+					selectedList[i]->SetSelectedGrid(true);
 		}
 	}
 }

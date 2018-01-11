@@ -34,7 +34,7 @@ void CTank::Init(void)
 				Vector3(-(this->GetScaleEntity().x / 2.f),
 					-(this->GetScaleEntity().y / 2.f),
 					-(this->GetScaleEntity().z / 2.f)));
-	this->InitLOD("obj_cube", "sphere", "cubeSG");
+	this->InitLOD("obj_cube", "cube", "cube");
 	TankNode = CSceneGraph::GetInstance()->AddNode(this);
 	// Add to the EntityManager
 	CSpatialPartition::GetInstance()->Add(this);
@@ -53,7 +53,7 @@ void CTank::Init(void)
 						Vector3(-(ThreadLeft->GetScaleEntity().x / 2.f), 
 								-(ThreadLeft->GetScaleEntity().y / 2.f), 
 								-(ThreadLeft->GetScaleEntity().z / 2.f)));
-	ThreadLeft->InitLOD("obj_cube", "sphere", "cubeSG");
+	ThreadLeft->InitLOD("obj_cube", "cube", "cube");
 	ThreadLeft->TankPartNode = this->TankNode->AddChild(ThreadLeft);
 	CSpatialPartition::GetInstance()->Add(ThreadLeft);
 
@@ -70,7 +70,7 @@ void CTank::Init(void)
 						Vector3(-(ThreadRight->GetScaleEntity().x / 2.f),
 							-(ThreadRight->GetScaleEntity().y / 2.f),
 							-(ThreadRight->GetScaleEntity().z / 2.f)));
-	ThreadRight->InitLOD("obj_cube", "sphere", "cubeSG");
+	ThreadRight->InitLOD("obj_cube", "cube", "cube");
 	ThreadRight->TankPartNode = this->TankNode->AddChild(ThreadRight);
 	CSpatialPartition::GetInstance()->Add(ThreadRight);
 
@@ -87,7 +87,7 @@ void CTank::Init(void)
 					Vector3(-(Turret->GetScaleEntity().x / 2.f),
 						-(Turret->GetScaleEntity().y / 2.f),
 						-(Turret->GetScaleEntity().z / 2.f)));
-	Turret->InitLOD("obj_cube", "sphere", "cubeSG");
+	Turret->InitLOD("obj_cube", "cube", "cube");
 	Turret->TankPartNode = this->TankNode->AddChild(Turret);
 	CSpatialPartition::GetInstance()->Add(Turret);
 }

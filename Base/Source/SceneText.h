@@ -11,6 +11,8 @@
 #include "GenericEntity.h"
 #include "SceneGraph\UpdateTransformation.h"
 #include "Enemy\Enemy.h"
+#include "Lua\LuaInterface.h"
+#include "Waypoint\WaypointManager.h"
 #include <vector>
 
 class ShaderProgram;

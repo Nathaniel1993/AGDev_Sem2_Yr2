@@ -4,6 +4,7 @@
 #include "../GroundEntity.h"
 #include "../WeaponInfo/WeaponInfo.h"
 
+
 class CPlayerInfo
 {
 protected:
@@ -128,4 +129,10 @@ private:
 	CWeaponInfo* secondaryWeapon;
 	CWeaponInfo **weapon;
 	int currWeapon;
+
+	// Keys to move player
+	char keyMoveForward;
+	char keyMoveBackward;
+	char keyMoveLeft;
+	char keyMoveRight;
 };

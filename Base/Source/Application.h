@@ -3,7 +3,7 @@
 
 #include "timer.h"
 #include "GameStateManagement\IntroState.h"
-#include"GameStateManagement\MenuState.h"
+#include "GameStateManagement\MenuState.h"
 
 class ShaderProgram;
 struct GLFWwindow;
@@ -37,8 +37,11 @@ private:
 	void InitDispay(void);
 
 	// Should make these not hard-coded :P
-	const static int m_window_width = 800;
-	const static int m_window_height = 600;
+	// const static int m_window_width = 800;
+	// const static int m_window_height = 600;
+
+	int m_window_width;
+	int m_window_height;
 
 	//Declare a window object
 	StopWatch m_timer;

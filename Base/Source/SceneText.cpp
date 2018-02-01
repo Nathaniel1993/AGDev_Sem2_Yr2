@@ -121,7 +121,6 @@ void SceneText::Init()
 	lights[1]->name = "lights[1]";
 
 	
-
 	// Create the playerinfo instance, which manages all information about the player
 	playerInfo = CPlayerInfo::GetInstance();
 	playerInfo->Init();
@@ -218,6 +217,7 @@ void SceneText::Init()
 	theTank2->SetPosition(Vector3(15.f, 1.f, -10.f));
 	theTank2->Init();
 	//// ======================= NEED TO FIX THIS ==========================
+	
 	//theEnemy.push_back(theEnemyList);
 	//theEnemy[4] = new CEnemy();
 	//theEnemy[4]->Init();
@@ -229,7 +229,25 @@ void SceneText::Init()
 	//bRotateMtx->ApplyUpdate(1.0f, 0.0f, 1.0f, 0.0f);
 	//bRotateMtx->SetSteps(-60, 60);
 	//theEnemyChildNode4->SetUpdateTransformation(bRotateMtx);
+	
 	// ===================================================================
+
+	// Create Wapoint inside WaypointManager
+	lua_getglobal(CLuaInterface::GetInstance()->theLuaState, "Waypoint_A_1");
+	int wayPointA = CWaypointManager::GetInstance()->AddWaypoint(Vector3(CLuaInterface::GetInstance()->GetField("x"),
+																		CLuaInterface::GetInstance()->GetField("y"),
+																		CLuaInterface::GetInstance()->GetField("z")));
+
+	lua_getglobal(CLuaInterface::GetInstance()->theLuaState, "Waypoint_A_2");
+	int wayPointB = CWaypointManager::GetInstance()->AddWaypoint(wayPointA, Vector3(CLuaInterface::GetInstance()->GetField("x"),
+																					CLuaInterface::GetInstance()->GetField("y"),
+																					CLuaInterface::GetInstance()->GetField("z")));
+
+	lua_getglobal(CLuaInterface::GetInstance()->theLuaState, "Waypoint_A_3");
+	int wayPointC = CWaypointManager::GetInstance()->AddWaypoint(wayPointB, Vector3(CLuaInterface::GetInstance()->GetField("x"),
+																					CLuaInterface::GetInstance()->GetField("y"),
+																					CLuaInterface::GetInstance()->GetField("z")));
+	CWaypointManager::GetInstance()->PrintSelf();
 
 	groundEntity = Create::Ground("GRASS_DARKGREEN", "GEO_GRASS_LIGHTGREEN");
 	//	Create::Text3DObject("text", Vector3(0.0f, 0.0f, 0.0f), "DM2210", Vector3(10.0f, 10.0f, 10.0f), Color(0, 1, 1));

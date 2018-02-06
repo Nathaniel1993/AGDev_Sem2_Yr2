@@ -205,7 +205,18 @@ void SceneText::Init()
 	Create::Asset("lightball", Vector3(lights[0]->position.x, lights[0]->position.y, lights[0]->position.z)); // Lightball
 
 	// Create a CEnemy instance
-	CTank* theTank = new CTank();
+	for (int i = 0; i < 5; ++i)
+	{
+		CTank* theTank = new CTank();
+		theTank->SetPosition(Vector3(15.f * i, 1.f, -20.f));
+		theTank->Init();
+		theTank->SetID(i);
+		theTanks_.push_back(theTank);
+	}
+	walkDist = 50;
+	elapsedTime = 0;
+	bounceTime = 0;
+	/*CTank* theTank = new CTank();
 	theTank->SetPosition(Vector3(5.f, 1.f, 10.f));
 	theTank->Init();
 
@@ -215,7 +226,7 @@ void SceneText::Init()
 
 	CTank* theTank2 = new CTank();
 	theTank2->SetPosition(Vector3(15.f, 1.f, -10.f));
-	theTank2->Init();
+	theTank2->Init();*/
 	//// ======================= NEED TO FIX THIS ==========================
 	
 	//theEnemy.push_back(theEnemyList);
@@ -280,6 +291,8 @@ void SceneText::Update(double dt)
 	// Update our entities
 	CSpatialPartition::GetInstance()->Update(dt);
 
+	elapsedTime += dt;
+
 	// THIS WHOLE CHUNK TILL <THERE> CAN REMOVE INTO ENTITIES LOGIC! Or maybe into a scene function to keep the update clean
 	if (KeyboardController::GetInstance()->IsKeyDown('1'))
 		glEnable(GL_CULL_FACE);
@@ -325,7 +338,21 @@ void SceneText::Update(double dt)
 		cout << "Mouse Wheel has offset in Y-axis of " << MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_YOFFSET) << endl;
 	}
 	// <THERE>
+	for (int i = 0; i < theTanks_.size(); ++i)
+	{
+		if ((theTanks_[i]->GetID() % 2) == 0)
+		{
+			//bounceTime = elapsedTime + 5;
+			/*CUpdateTransformation* aTransformMtx = new CUpdateTransformation();
+			aTransformMtx->ApplyUpdate(theTanks_[i]->GetPosition().x, theTanks_[i]->GetPosition().y, (sin(elapsedTime) * walkDist));
+			aTransformMtx->SetSteps(0, 100);*/
 
+			theTanks_[i]->SetPosition(Vector3(theTanks_[i]->GetPosition().x,
+				theTanks_[i]->GetPosition().y,
+				(sin(elapsedTime) * walkDist)));
+		}
+
+	}
 	// Update the player position and other details based on keyboard and mouse inputs
 	playerInfo->Update(dt);
 

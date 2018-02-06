@@ -19,6 +19,7 @@ class ShaderProgram;
 class SceneManager;
 class TextEntity;
 class Light;
+class CTank;
 class SceneText : public Scene
 {	
 public:
@@ -41,6 +42,11 @@ private:
 	Light* lights[2];
 
 	GenericEntity* theCube;
+
+	typedef std::vector<CTank*>tankList;
+	tankList theTanks_;
+	int walkDist;
+	double elapsedTime, bounceTime;
 
 	// static SceneText* sInstance; // The pointer to the object that gets registered
 };

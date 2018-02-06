@@ -19,6 +19,9 @@ public:
 	inline void SetScaleEntity(const Vector3& _value){ scale = _value; };
 	inline Vector3 GetScaleEntity(){ return scale; };
 
+	inline void SetID(const int id_) { id = id_; };
+	inline int GetID() { return id; };
+
 	bool IsDone();
 	void SetIsDone(const bool _value);
 
@@ -51,6 +54,8 @@ protected:
 
 	bool selected_Grid;
 	bool selected_Gun;
+
+	int id;
 };
 
 #endif // ENTITY_BASE_H

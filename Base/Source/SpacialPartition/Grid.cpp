@@ -101,7 +101,10 @@ void CGrid::RenderObjects(void)
 {
 	for (int i = 0; i < ListOfObjects.size(); ++i)
 	{
-		ListOfObjects[i]->Render();
+		if (CSceneGraph::GetInstance()->GetRoot()->GetEntity(ListOfObjects[i]) == NULL)
+		{	// Render items that are not in SceneGraph
+			ListOfObjects[i]->Render();
+		}
 	}
 }
 
@@ -393,7 +396,7 @@ bool CGrid::CheckForCollision(void)
 					CCollider *thatCollider = dynamic_cast<CCollider*>(*colliderThat);
 					Vector3 thatMinAABB = (*colliderThat)->GetPosition() + thatCollider->GetMinAABB();
 					Vector3 thatMaxAABB = (*colliderThat)->GetPosition() + thatCollider->GetMaxAABB();
-
+					
 					if (CheckLineSegmentPlane(thisEntity->GetPosition(),
 						thisEntity->GetPosition() - thisEntity->GetDirection() * thisEntity->GetLength(),
 						thatMinAABB, thatMaxAABB,

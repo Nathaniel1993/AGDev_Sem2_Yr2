@@ -22,6 +22,10 @@
 #include "SkyBox/SkyBoxEntity.h"
 #include "SceneGraph\SceneGraph.h"
 #include "Enemy\Tank\Tank.h"
+#include "Enemy\EnemyStates\StatesTank.h"
+#include "Enemy\EnemyStates\StateMachine.h"
+
+#define MAX_NUM_TANKS 4
 
 #include <iostream>
 using namespace std;
@@ -44,59 +48,6 @@ SceneText::~SceneText()
 
 void SceneText::Init()
 {
-	/*
-	currProg = GraphicsManager::GetInstance()->LoadShader("default", "Shader//Texture.vertexshader", "Shader//MultiTexture.fragmentshader");
-
-	// Tell the shader program to store these uniform locations
-	{
-		currProg->AddUniform("MVP");
-		currProg->AddUniform("MV");
-		currProg->AddUniform("MV_inverse_transpose");
-		currProg->AddUniform("material.kAmbient");
-		currProg->AddUniform("material.kDiffuse");
-		currProg->AddUniform("material.kSpecular");
-		currProg->AddUniform("material.kShininess");
-		currProg->AddUniform("lightEnabled");
-		currProg->AddUniform("numLights");
-		currProg->AddUniform("lights[0].type");
-		currProg->AddUniform("lights[0].position_cameraspace");
-		currProg->AddUniform("lights[0].color");
-		currProg->AddUniform("lights[0].power");
-		currProg->AddUniform("lights[0].kC");
-		currProg->AddUniform("lights[0].kL");
-		currProg->AddUniform("lights[0].kQ");
-		currProg->AddUniform("lights[0].spotDirection");
-		currProg->AddUniform("lights[0].cosCutoff");
-		currProg->AddUniform("lights[0].cosInner");
-		currProg->AddUniform("lights[0].exponent");
-		currProg->AddUniform("lights[1].type");
-		currProg->AddUniform("lights[1].position_cameraspace");
-		currProg->AddUniform("lights[1].color");
-		currProg->AddUniform("lights[1].power");
-		currProg->AddUniform("lights[1].kC");
-		currProg->AddUniform("lights[1].kL");
-		currProg->AddUniform("lights[1].kQ");
-		currProg->AddUniform("lights[1].spotDirection");
-		currProg->AddUniform("lights[1].cosCutoff");
-		currProg->AddUniform("lights[1].cosInner");
-		currProg->AddUniform("lights[1].exponent");
-		currProg->AddUniform("colorTextureEnabled[0]");
-		currProg->AddUniform("colorTextureEnabled[1]");
-		currProg->AddUniform("colorTextureEnabled[2]");
-		currProg->AddUniform("colorTexture[0]");
-		currProg->AddUniform("colorTexture[1]");
-		currProg->AddUniform("colorTexture[2]");
-		currProg->AddUniform("textEnabled");
-		currProg->AddUniform("textColor");
-	}
-
-	// Tell the graphics manager to use the shader we just loaded
-	GraphicsManager::GetInstance()->SetActiveShader("default");
-
-	currProg->UpdateInt("numLights", 1);
-	currProg->UpdateInt("textEnabled", 0);
-	*/
-
 	lights[0] = new Light();
 	GraphicsManager::GetInstance()->AddLight("lights[0]", lights[0]);
 	lights[0]->type = Light::LIGHT_DIRECTIONAL;
@@ -204,44 +155,9 @@ void SceneText::Init()
 	Create::Asset("reference", Vector3(0.0f, 0.0f, 0.0f)); // Reference
 	Create::Asset("lightball", Vector3(lights[0]->position.x, lights[0]->position.y, lights[0]->position.z)); // Lightball
 
-	// Create a CEnemy instance
-	for (int i = 0; i < 5; ++i)
-	{
-		CTank* theTank = new CTank();
-		theTank->SetPosition(Vector3(15.f * i, 1.f, -20.f));
-		theTank->Init();
-		theTank->SetID(i);
-		theTanks_.push_back(theTank);
-	}
 	walkDist = 50;
 	elapsedTime = 0;
 	bounceTime = 0;
-	/*CTank* theTank = new CTank();
-	theTank->SetPosition(Vector3(5.f, 1.f, 10.f));
-	theTank->Init();
-
-	CTank* theTank1 = new CTank();
-	theTank1->SetPosition(Vector3(-5.f, 1.f, -10.f));
-	theTank1->Init();
-
-	CTank* theTank2 = new CTank();
-	theTank2->SetPosition(Vector3(15.f, 1.f, -10.f));
-	theTank2->Init();*/
-	//// ======================= NEED TO FIX THIS ==========================
-	
-	//theEnemy.push_back(theEnemyList);
-	//theEnemy[4] = new CEnemy();
-	//theEnemy[4]->Init();
-	//theEnemy[4]->InitLOD("cube", "sphere", "cube");
-	//theEnemy[4]->SetScale(Vector3(4.f, 4.f, 4.f));
-	//CSceneNode* theEnemyChildNode4 = theEnemyChildNode3->AddChild(theEnemy[4]);
-	//theEnemyChildNode4->ApplyTranslate(theEnemy[3]->GetPos().x, theEnemy[3]->GetPos().y, theEnemy[3]->GetPos().z);
-	//CUpdateTransformation* bRotateMtx = new CUpdateTransformation();
-	//bRotateMtx->ApplyUpdate(1.0f, 0.0f, 1.0f, 0.0f);
-	//bRotateMtx->SetSteps(-60, 60);
-	//theEnemyChildNode4->SetUpdateTransformation(bRotateMtx);
-	
-	// ===================================================================
 
 	// Create Wapoint inside WaypointManager
 	lua_getglobal(CLuaInterface::GetInstance()->theLuaState, "Waypoint_A_1");
@@ -258,7 +174,59 @@ void SceneText::Init()
 	int wayPointC = CWaypointManager::GetInstance()->AddWaypoint(wayPointB, Vector3(CLuaInterface::GetInstance()->GetField("x"),
 																					CLuaInterface::GetInstance()->GetField("y"),
 																					CLuaInterface::GetInstance()->GetField("z")));
+
+	lua_getglobal(CLuaInterface::GetInstance()->theLuaState, "Waypoint_A_4");
+	int wayPointD = CWaypointManager::GetInstance()->AddWaypoint(wayPointC, Vector3(CLuaInterface::GetInstance()->GetField("x"),
+																					CLuaInterface::GetInstance()->GetField("y"),
+																					CLuaInterface::GetInstance()->GetField("z")));
+
+	lua_getglobal(CLuaInterface::GetInstance()->theLuaState, "Waypoint_A_5");
+	int wayPointE = CWaypointManager::GetInstance()->AddWaypoint(wayPointD, Vector3(CLuaInterface::GetInstance()->GetField("x"),
+																					CLuaInterface::GetInstance()->GetField("y"),
+																					CLuaInterface::GetInstance()->GetField("z")));
+
+	lua_getglobal(CLuaInterface::GetInstance()->theLuaState, "Waypoint_A_6");
+	int wayPointF = CWaypointManager::GetInstance()->AddWaypoint(wayPointE, Vector3(CLuaInterface::GetInstance()->GetField("x"),
+																					CLuaInterface::GetInstance()->GetField("y"),
+																					CLuaInterface::GetInstance()->GetField("z")));
+
+	lua_getglobal(CLuaInterface::GetInstance()->theLuaState, "Waypoint_A_7");
+	int wayPointG = CWaypointManager::GetInstance()->AddWaypoint(wayPointF, Vector3(CLuaInterface::GetInstance()->GetField("x"),
+																					CLuaInterface::GetInstance()->GetField("y"),
+																					CLuaInterface::GetInstance()->GetField("z")));
+
+	lua_getglobal(CLuaInterface::GetInstance()->theLuaState, "Waypoint_A_8");
+	int wayPointH = CWaypointManager::GetInstance()->AddWaypoint(wayPointG, Vector3(CLuaInterface::GetInstance()->GetField("x"),
+																					CLuaInterface::GetInstance()->GetField("y"),
+																					CLuaInterface::GetInstance()->GetField("z")));
+	
 	CWaypointManager::GetInstance()->PrintSelf();
+	Vector3 yOffset(0.f, -10.f, 0.f);
+	for (int i = 0; i < CWaypointManager::GetInstance()->GetNumberOfWaypoints(); ++ i)
+	{
+		Create::Asset("lightball", CWaypointManager::GetInstance()->GetWaypoint(i)->GetPosition() + yOffset, Vector3(5.f, 5.f, 5.f));
+	}
+
+	// Create a CEnemy instance
+	for (int i = 0; i < MAX_NUM_TANKS; ++i)
+	{
+		CTank* theTank = new CTank();
+		theTank->SetPosition(CWaypointManager::GetInstance()->GetWaypoint(i * 2)->GetPosition());
+		theTank->TankNode = CSceneGraph::GetInstance()->AddNode(theTank);
+		theTank->Init();
+		theTank->SetCurrWaypoint(i * 2);
+		theTank->PrevNode = CWaypointManager::GetInstance()->GetWaypoint(i)->GetPosition();
+		if (i * 2 + 1 >= CWaypointManager::GetInstance()->GetNumberOfWaypoints())
+		{
+			theTank->NextNode = CWaypointManager::GetInstance()->GetWaypoint(0)->GetPosition();
+		}
+		else
+		{
+			theTank->NextNode = CWaypointManager::GetInstance()->GetWaypoint(i * 2 + 1)->GetPosition();
+		}
+		theTank->SetTankID(i);
+		theTanks_.push_back(theTank);
+	}
 
 	groundEntity = Create::Ground("GRASS_DARKGREEN", "GEO_GRASS_LIGHTGREEN");
 	//	Create::Text3DObject("text", Vector3(0.0f, 0.0f, 0.0f), "DM2210", Vector3(10.0f, 10.0f, 10.0f), Color(0, 1, 1));
@@ -288,6 +256,20 @@ void SceneText::Init()
 
 void SceneText::Update(double dt)
 {
+	// Update State Machine
+	std::vector<CTank*>::iterator it = theTanks_.begin();
+	while (it != theTanks_.end())
+	{
+		if (!(*it)->IsDone() && (*it)->sm)
+		{
+			(*it)->sm->Update(dt);
+			++it;
+		}
+		else
+		{
+			it = theTanks_.erase(it);
+		}
+	}
 	// Update our entities
 	CSpatialPartition::GetInstance()->Update(dt);
 
@@ -337,22 +319,7 @@ void SceneText::Update(double dt)
 	{
 		cout << "Mouse Wheel has offset in Y-axis of " << MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_YOFFSET) << endl;
 	}
-	// <THERE>
-	for (int i = 0; i < theTanks_.size(); ++i)
-	{
-		if ((theTanks_[i]->GetID() % 2) == 0)
-		{
-			//bounceTime = elapsedTime + 5;
-			/*CUpdateTransformation* aTransformMtx = new CUpdateTransformation();
-			aTransformMtx->ApplyUpdate(theTanks_[i]->GetPosition().x, theTanks_[i]->GetPosition().y, (sin(elapsedTime) * walkDist));
-			aTransformMtx->SetSteps(0, 100);*/
-
-			theTanks_[i]->SetPosition(Vector3(theTanks_[i]->GetPosition().x,
-				theTanks_[i]->GetPosition().y,
-				(sin(elapsedTime) * walkDist)));
-		}
-
-	}
+	
 	// Update the player position and other details based on keyboard and mouse inputs
 	playerInfo->Update(dt);
 

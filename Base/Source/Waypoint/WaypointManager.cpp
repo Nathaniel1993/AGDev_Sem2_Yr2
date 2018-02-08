@@ -64,7 +64,7 @@ int CWaypointManager::AddWaypoint(const int m_iID, Vector3 position)
 				// Add this new Waypoint as a related waypoint to the current Waypoint
 				aWayPoint->AddRelatedWaypoint(aNewWaypoint);
 
-				return 	this->m_iID;
+				return this->m_iID;
 			}
 		}
 	}

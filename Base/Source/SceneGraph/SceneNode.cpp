@@ -351,7 +351,19 @@ void CSceneNode::Render(void)
 	if (theEntity)
 	{
 		//modelStack.LoadMatrix(this->GetTransform());
-		modelStack.MultMatrix(this->GetTransform());
+		//modelStack.MultMatrix(this->GetTransform());
+		if (this->GetParent()->GetEntity() == NULL)
+		{
+			modelStack.Translate(theEntity->GetPosition().x,
+				theEntity->GetPosition().y,
+				theEntity->GetPosition().z);
+		}
+		else
+		{
+			modelStack.Translate(theEntity->GetPosition().x - this->GetParent()->GetEntity()->GetPosition().x,
+				theEntity->GetPosition().y - this->GetParent()->GetEntity()->GetPosition().y,
+				theEntity->GetPosition().z - this->GetParent()->GetEntity()->GetPosition().z);
+		}
 
 		/*
 		Mtx44 Mtx = modelStack.Top();
@@ -367,7 +379,7 @@ void CSceneNode::Render(void)
 
 
 		// Render the entity
-		//theEntity->Render();
+		theEntity->Render();
 	}
 
 	// Render the children

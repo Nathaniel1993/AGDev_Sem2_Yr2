@@ -45,7 +45,7 @@ for i,v in ipairs(arg) do
 
 
 end
-title = "DM2240 - Week 14 Scripting"
+title = "DM2240 - Assignment"
 width = 800
 height = 600
 PlayerPos_x = 100
@@ -62,6 +62,11 @@ moveRight 	 = "D"
 CPlayerInfoStartPos = {0,0,10}
 
 -- Waypoints
-Waypoint_A_1 = {x = 10.0, y = 0.0, z = 50.0}
-Waypoint_A_2 = {x = 10.0, y = 0.0, z = -50.0}
-Waypoint_A_3 = {x = -10.0, y = 0.0, z = 0.0}
+Waypoint_A_1 = {x = 100.0, y = 0.0, z = 200.0}
+Waypoint_A_2 = {x = 150.0, y = 0.0, z = 0.0}
+Waypoint_A_3 = {x = 100.0, y = 0.0, z = -200.0}
+Waypoint_A_4 = {x = 0.0, y = 0.0, z = -250.0}
+Waypoint_A_5 = {x = -100.0, y = 0.0, z = -200.0}
+Waypoint_A_6 = {x = -150.0, y = 0.0, z = 0.0}
+Waypoint_A_7 = {x = -100.0, y = 0.0, z = 200.0}
+Waypoint_A_8 = {x = 0.0, y = 0.0, z = 250.0}

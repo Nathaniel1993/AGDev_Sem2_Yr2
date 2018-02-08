@@ -19,6 +19,7 @@ void StateTankPatrol::Enter()
 
 void StateTankPatrol::Update(double dt)
 {
+	//m_speed = m_tank->GetSpeed();
 	Vector3 Vel = (m_tank->NextNode - m_tank->GetPosition()).Normalized() * m_speed * (float)dt;
 	m_tank->SetPosition(m_tank->GetPosition() + Vel);
 
@@ -38,6 +39,7 @@ void StateTankPatrol::Update(double dt)
 		m_tank->PrevNode = m_tank->NextNode;
 		m_tank->NextNode = CWaypointManager::GetInstance()->GetWaypoint(m_tank->GetCurrWaypoint())->GetPosition();
 	}
+	
 }
 
 void StateTankPatrol::Exit()

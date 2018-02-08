@@ -38,7 +38,7 @@ private:
 	CPlayerInfo* playerInfo;
 	GroundEntity* groundEntity;
 	FPSCamera camera;
-	TextEntity* textObj[3];
+	TextEntity* textObj[5];
 	Light* lights[2];
 
 	GenericEntity* theCube;
@@ -47,6 +47,11 @@ private:
 	tankList theTanks_;
 	int walkDist;
 	double elapsedTime, bounceTime;
+	std::vector<int>ammoCount;
+	bool ammoFilled;
+
+	//std::vector<EntityManager*>entityList;
+
 
 	// static SceneText* sInstance; // The pointer to the object that gets registered
 };

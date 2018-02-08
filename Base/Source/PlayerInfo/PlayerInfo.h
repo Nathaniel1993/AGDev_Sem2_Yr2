@@ -100,7 +100,7 @@ public:
 
 	int GetBulletCount(void) const;
 
-	int GetMagCount(void) const;
+	int GetMagCount(void);
 
 	int GetClipCount(void) const;
 
@@ -129,6 +129,7 @@ private:
 	CWeaponInfo* secondaryWeapon;
 	CWeaponInfo **weapon;
 	int currWeapon;
+	int ammo;
 
 	// Keys to move player
 	char keyMoveForward;

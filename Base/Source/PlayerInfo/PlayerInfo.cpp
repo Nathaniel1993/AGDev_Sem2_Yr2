@@ -92,6 +92,8 @@ void CPlayerInfo::Init(void)
 
 	int a = 1, b = 2, c = 3, d = 4;
 	CLuaInterface::GetInstance()->getVariableValues("GetMinMax", a, b, c, d);
+
+	ammo = 0;
 }
 
 // Returns true if the player is on ground
@@ -526,4 +528,10 @@ void CPlayerInfo::DetachCamera()
 GroundEntity* CPlayerInfo::GetTerrain(void)
 {
 	return m_pTerrain;
+}
+
+int CPlayerInfo::GetMagCount(void) 
+{
+	ammo = primaryWeapon->GetMagRound();
+	return ammo;
 }
